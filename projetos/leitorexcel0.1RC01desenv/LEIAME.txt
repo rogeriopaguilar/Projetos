@@ -1,0 +1,54 @@
+O leitor-excel é um pequeno componente criado para ajudar no processamento de planilhas excel utilizando a plataforma java.
+As bibliotecas necessárias para a execução do componente estão no diretório dist do pacote de desenvolvimento.
+No pacote para produção estas libs estão todas no diretório principal (criado após descompactar o arquivo principal).
+
+Lista das bibliotecas necessárias:
+
+commons-lang-2.1
+log4j-1.2.13
+poi-2.5.1-final-20040804
+OBS: Se o componente for utilizado em algum projeto que já possua a biblioteca commons-lang, é necessário verificar
+se a versão é maior ou igual à 2.1, pois se for menor ocorrerá um erro de execução.
+
+O componente foi desenvolvido e testado utilizando o JDK 1.5.0.
+
+Na distribuição para produção, para testar o componente de forma rápida, abra o console, vá 
+até a pasta onde o arquivo foi descompactado e execute o comando:
+	java -jar leitor-excel-0.1-RC01.jar 1 "[5,5]" "/usr/local/java/temp/teste.xls"					
+
+Substituindo a String "[5,5]" por alguma que você queira testar e o caminho "/usr/local/java/temp/teste.xls"
+pelo caminho de alguma planilha válida.
+
+A documentação do componente foi criada o utilitário javadoc e está disponível
+dentro da pasta javadoc do arquivo compactado (biblioteca para produção) e dentro do diretório
+dist/javadoc no pacote de desenvolvimento.
+
+O projeto foi construído com as seguintes ferramentas:
+
+1 - JDK 1.5.0, disponível em http://java.sun.com
+2 - javacc versão 4.0, disponível em https://javacc.dev.java.net/
+3 - ant versão 1.6.2, disponível em http://ant.apache.org/
+4 - Biblioteca Jakarta POI versão 2.5.1, disponível em http://jakarta.apache.org/poi/
+5 - Biblioteca Jakarta Commons-Lang versão 2.1, disponível em http://jakarta.apache.org/commons/lang/
+
+Para compilar o projeto, após descompactar o pacote de desenvolvimento, é necessário alterar a
+entrada javacc.home para o diretório correto da máquina de desenvolvimento.
+Após isso, abra o console, vá até a pasta onde o arquivo foi descompactado, digite o comando
+ant, aperte enter e aguarde o processo de construção terminar.
+Após o processo terminar, o pacote para produção estará disponível na pasta dist.
+OBS: Certifique-se de configurar as variáveis de ambiente JAVA_HOME, PATH e ANT_HOME
+para os locais corretos na máquina de desenvolvimento.
+
+Um pequeno tutorial sobre como utilizar o componente está disponível no javadoc para a classe
+br.eti.rogerioaguilar.minhasclasses.util.excel.leitor.LeitorExcel
+Mais informações podem ser encontradas no javadoc para as outras classes do componente.
+
+Qualquer dúvida, informação sobre problemas na biblioteca, crítica ou sugestão 
+favor enviar e-mail para:
+
+rogeriopaguilar@terra.com.br
+
+2006 - Rogério de Paula Aguilar
+http://www.rogerioaguilar.eti.br
+rogeriopaguilar@terra.com.br
+

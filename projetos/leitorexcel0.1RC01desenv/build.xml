@@ -1,0 +1,150 @@
+<!--
+Data da criação: 25/09/2006
+autor: Rogério de Paula Aguilar
+
+OBS: verificar o arquivo ant.properties caso queira modificar as configurações
+
+TARGETS:
+
+1 - inicializar: imprime as configurações do ambiente e cria os diretórios necessários;
+2 - limpar     : apara os arquivos compilados, o diretório de distribuição e os arquivos gerados pelo javacc
+3 - gerarParser: chama o javacc para gerar as classes necessárias para o parser da string de entrada para o leitor;
+4 - compilar   : compila os fontes do projeto
+5 - empacotar  : cria o jar da aplicação e coloca o mesmo no diretório de distribuição
+6 - default    : chama as outras targets na ordem correta para construir o projeto;
+7 - javadoc    : cria a documentação javadoc para o projeto
+
+-->
+<project name="leitor-excel" basedir="." default="default">
+
+	<property file="ant.properties">
+	</property>
+	
+	<path id="base.path">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+	</path>
+	
+	<target name="inicializar">
+		<echo>-------------------------------Inicializando Build-------------------------------</echo>
+		<echo message="JAVA_VERSION:      ${ant.java.version}"/>
+		<echo message="ANT_VERSION :      ${ant.version}"/>
+		<echo message="APP.VERSION :      ${app.version}"/>
+		<echo message="SRC.DIR     :      ${src.dir}"/>
+		<echo message="BIN.DIR     :      ${bin.dir}"/>
+		<echo message="LIB.DIR     :      ${lib.dir}"/>
+		<echo message="DIR.DIST    :      ${dist.dir}"/>
+		<echo message="MAIN.CLASS  :      ${main.class}"/>        
+		<mkdir dir="${bin.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+		<echo message="JAVACC.HOME:		  ${javacc.home}"/>
+		<echo>---------------------------------------------------------------------------------</echo>
+		
+
+		
+	</target>
+
+	
+	<target name="limpar">
+		<echo>----------Limpando arquivos----------</echo>
+		<delete>
+		 	<fileset dir="${bin.dir}/"></fileset>
+		 	<fileset dir="${src.dir}/br/eti/rogerioaguilar/minhasclasses/util/excel/leitor/gramatica/impl"></fileset>
+		 	<fileset dir="${dist.dir}"></fileset>
+		</delete>
+		<echo>----------Limpeza realizada com sucesso----------</echo>
+	</target>
+		
+	<target name="gerarParser">
+		<echo>----------Gerando parser----------</echo>
+		<javacc javacchome="${javacc.home}" 
+				outputdirectory="${src.dir}/br/eti/rogerioaguilar/minhasclasses/util/excel/leitor/gramatica/impl" 
+				static="false"
+				target="${src.dir}/br/eti/rogerioaguilar/minhasclasses/util/excel/leitor/gramatica/definicao/LeitorExcel.jj"
+		/>
+		<echo>----------Parser gerado com sucesso----------</echo>
+	</target>
+	
+	<target name="compilar">
+		<echo>----------Compilando fontes----------</echo>
+			<javac srcdir="${src.dir}"
+		 			classpathref="base.path"
+					debug="true"
+		   			debuglevel="lines, vars, source"
+					optimize="true"
+					destdir="${bin.dir}">
+			</javac>
+		<echo>----------Fontes compilados----------</echo>
+	</target>
+
+	<target name="empacotar">
+		<echo>----------Empacotando aplicação----------</echo>
+			  <pathconvert property="bibliotecas" pathsep=" ">
+			    <mapper>
+			      <chainedmapper>
+			        <flattenmapper />
+			        <globmapper from="*" to="*" />
+			      </chainedmapper>
+			    </mapper>
+			    <path>
+			      <fileset dir="${lib.dir}">
+			        <include name="**/*.jar" />
+			      </fileset>
+			    </path>
+			  </pathconvert>
+
+			<copy todir="${bin.dir}">
+				<fileset dir="config">
+					<include name="log4j.properties"/>
+					<include name="GPL.txt"/>
+				</fileset>
+			</copy>
+
+				<copy todir="${dist.dir}">
+					<fileset dir=".">
+						<include name="LEIAME.txt"/>
+					</fileset>
+					<fileset dir="config">
+						<include name="GPL.txt"/>
+					</fileset>
+				</copy>
+
+
+		
+			<jar destfile="${dist.dir}/leitor-excel-${app.version}.jar" basedir="${bin.dir}">
+			    <manifest>
+			      <attribute name="Built-By" value="${user.name}" />
+			      <attribute name="Main-Class" value="${main.class}" />
+			      <section name="common">
+			        <attribute name="Specification-Title" value="leitor-excel" />
+			        <attribute name="Specification-Version" value="${app.version}" />
+			        <attribute name="Specification-Vendor" value="raguilar" />
+			        <attribute name="Implementation-Title" value="leitor-excel" />
+			        <attribute name="Implementation-Version" value="${app.version}" />
+			        <attribute name="Implementation-Vendor" value="raguilar" />
+			      </section>
+			      <attribute name="Class-Path" value="${bibliotecas}" />
+			    </manifest>
+			  </jar>
+		
+				<delete dir="${bin.dir}">
+					<include name="log4j.properties"/>
+				</delete>
+
+		
+		<echo>----------Empacotamento criado----------</echo>
+	</target>
+
+	<target name="default" depends="inicializar, limpar, gerarParser, compilar, empacotar, javadoc">
+		<copy todir="${dist.dir}">
+			<fileset dir="${lib.dir}" includes="**/*.jar">
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="javadoc">
+			<javadoc  destdir="${dist.dir}/javadoc" classpathref="base.path"> 
+				<fileset dir="${src.dir}"></fileset>
+			</javadoc>
+	</target>		
+	
+</project>

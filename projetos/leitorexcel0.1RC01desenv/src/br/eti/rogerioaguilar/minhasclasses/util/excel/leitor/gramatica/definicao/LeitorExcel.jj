@@ -1,0 +1,184 @@
+
+
+
+PARSER_BEGIN(LeitorExcelReader)
+
+/*
+ * Copyright 2006 Rogério de Paula Aguilar
+ * 
+ * This file is part of leitor-excel.
+ *
+ *   leitor-excel is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   leitor-excel is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Foobar; if not, write to the Free Software
+ *   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * */
+
+
+package br.eti.rogerioaguilar.minhasclasses.util.excel.leitor.gramatica.impl;
+
+import java.util.*;
+import java.io.*;
+import org.apache.log4j.Logger;
+
+
+
+/**
+*Classe que retorna um mapa contendo uma lista que define								<br>
+*as colunas que são utilizadas em cada linha. O indexador do mapa						<br>
+*é o índice da linha ou o caracter "*", que significa todas as linhas.					<br>
+*Para cada linha o mapa contem uma lista de objetos Long indicando						<br>
+*as colunas que devem ser retornadas.													<br>
+*																						<br>
+*Gramática																				<br>
+*																						<br>
+* GRAMATICA := REG(-REG)* 																<br>	
+* REG := [linha|*|linha-linha, coluna((;coluna)* |*]									<br>
+* linha := número inteiro ou *															<br>
+* coluna := número inteiro ou *															<br>
+*																						<br>
+* OBS: As classes foram geradas utilizando o produto javacc versão 4.0					<br>
+*																						<br>
+* @version 0.1							
+* @author Rogério de Paula Aguilar	
+*/
+
+
+public class LeitorExcelReader {
+    static Logger log = Logger.getLogger(LeitorExcelReader.class);
+   
+  public static void main(String args[]) throws ParseException {
+    LeitorExcelReader parser = new LeitorExcelReader(System.in);
+    log.debug(parser.Gramatica());
+  }
+
+  public static Map getMapaEntradas(InputStream is) throws ParseException{	
+      LeitorExcelReader parser = new LeitorExcelReader(is);
+      Map mapa = parser.Gramatica();
+      return mapa;
+  }	
+
+	
+  public static void adicionarLinha(Map mapaLinhas, String linhaId){
+	if(mapaLinhas.get("" + linhaId) == null){
+		log.debug("Adicionando a linha no mapa -->" + linhaId);
+		mapaLinhas.put("" + linhaId, new TreeSet());
+	}else{
+		log.debug("Linha --> " + linhaId + " já adicionada no mapa.");
+	}
+  }	
+
+  public static void adicionarColuna(Map mapaLinhas, String linhaId, String colunaId){
+	adicionarLinha(mapaLinhas, linhaId);
+	log.debug("Adicionando coluna " + colunaId + " à linha --> " + linhaId);
+	if(!"*".equals(colunaId)){
+		((Set)mapaLinhas.get(linhaId)).add(new Long(colunaId));
+	}else{
+		((Set)mapaLinhas.get(linhaId)).add(colunaId);
+	}
+  }	
+
+
+}
+
+PARSER_END(LeitorExcelReader)
+
+SKIP :
+{
+  " "
+| "\n"  
+| "\t"
+| "\r"
+}
+
+TOKEN : 
+
+{
+  < NUM: ( ["0"-"9"] )+ >
+}
+
+
+Map Gramatica() :
+{
+	Map mapaLinhasProcessamento = new TreeMap();
+}
+{
+   ( Exp(mapaLinhasProcessamento) ) {
+	return mapaLinhasProcessamento;
+  }
+}
+
+
+
+
+void Exp(Map mapaLinhas) :
+{}
+{
+  Reg(mapaLinhas) ("-" Reg(mapaLinhas) )* 
+}
+
+void Reg(Map mapaLinhas) :
+{ 
+	Token numeroInicioLinha = null; 
+	Token numeroFinalLinha = null; 
+	Token colunaInicial = null; 
+}
+{
+	"[" ( ( numeroInicioLinha=<NUM>("-"numeroFinalLinha=<NUM>)?) | numeroInicioLinha="*") "," (  ( colunaInicial=<NUM> (AdicionarColuna(numeroInicioLinha, numeroFinalLinha, mapaLinhas))*   ) | colunaInicial="*"   ) "]" 		
+	{
+		log.debug("Linha Inicial    -->" + numeroInicioLinha);
+		log.debug("Linha Final      -->" + numeroFinalLinha);
+		if(!"*".equals("" + numeroInicioLinha)){
+			
+			long lngInicioLinha = Long.parseLong("" + numeroInicioLinha);
+			long lngFinalLinha = lngInicioLinha; 
+			if(numeroFinalLinha != null){
+				lngFinalLinha = Long.parseLong("" + numeroFinalLinha);
+			}
+			
+			if(lngInicioLinha > lngFinalLinha){
+				throw new IllegalArgumentException("Linha inicial deve ser <= à linha Final! -- Encontrado - Inicial -->" + lngInicioLinha +  "Final -->" + lngFinalLinha);
+			}
+			
+			for(long cont = lngInicioLinha; cont <= lngFinalLinha; cont++){ 
+				LeitorExcelReader.adicionarLinha(mapaLinhas, "" + cont); 
+				LeitorExcelReader.adicionarColuna(mapaLinhas, "" + cont, "" + colunaInicial);
+			}
+		}else{
+			LeitorExcelReader.adicionarLinha(mapaLinhas, "*"); 
+			LeitorExcelReader.adicionarColuna(mapaLinhas, "*", "" + colunaInicial);
+		}
+	}
+}
+
+void AdicionarColuna(Token linhaInicial, Token linhaFinal, Map mapaLinhas) :
+{ Token colunaAtual = null; }
+{
+	";" colunaAtual = <NUM>{
+		log.debug("Linha Inicial --> " + linhaInicial + " Linah Final -->" + linhaFinal);
+		if(!"*".equals("" + linhaInicial)){
+			long lngInicioLinha = Long.parseLong("" + linhaInicial);
+			long lngFinalLinha = lngInicioLinha;
+			if(linhaFinal != null){
+				lngFinalLinha = Long.parseLong("" + linhaFinal);
+			}
+			for(long cont = lngInicioLinha; cont <= lngFinalLinha; cont++){ 
+				LeitorExcelReader.adicionarColuna(mapaLinhas, "" + cont, "" + colunaAtual);
+			}
+		}else{
+			LeitorExcelReader.adicionarColuna(mapaLinhas, "*", "" + colunaAtual);
+		}
+	}
+
+}
+
