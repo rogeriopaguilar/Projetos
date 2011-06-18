@@ -1,0 +1,9 @@
+Lista de projetos:
+
+-projetos/GeradorPalavras --> Classe que gera combinações de palavras em java
+--|ler o javadoc da classe GeradorPalavras para entender como utilizá-la
+
+-projetos/leitorecel0.1RC01desenv --> componente para leitura de planilhas
+excel em java
+--|ler o documento Leiame.txt dentro da pasta do projeto para obter dados do
+--projeto
