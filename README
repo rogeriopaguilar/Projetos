@@ -1,5 +1,8 @@
 Lista de projetos:
 
+-projetos/Retris.zip --> instalação do clone do jogo Retris, que desenvolvi
+-há vários anos...
+
 -projetos/GeradorPalavras --> Classe que gera combinações de palavras em java
 --|ler o javadoc da classe GeradorPalavras para entender como utilizá-la
 
@@ -7,3 +10,10 @@ Lista de projetos:
 excel em java
 --|ler o documento Leiame.txt dentro da pasta do projeto para obter dados do
 --projeto
+
+-dnsec_v2: sistema para controle de segurança que desenvolvi para aprender as
+tecnologias java swing e hibernate.
+--/dnsec_v2/dnsec/doc --> contém o manual de instalação do sistema
+--/dnsec_v2/dnsec/build.xml --> build do ant utilizado para compilar e empacotar o projeto
+(é necessário alterar o caminho da entrada /opt/java/SDK/lib no arquivo para o diretório
+onde o jar javaee.jar está na máquina de desenvolvimento).

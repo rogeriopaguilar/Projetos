@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<div
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:jsp="http://java.sun.com/JSP/Page" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"  
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:bp="http://java.sun.com/blueprints/ui/14"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+		<h:form>
+		        <rich:toolBar>
+		            <rich:dropDownMenu value="Cadastros">
+		                <!-- 
+		                <rich:menuItem submitMode="ajax" value="New" action="#{teste.teste}">
+		                </rich:menuItem>
+		                <rich:menuItem   submitMode="ajax"  value="Open" action="#{teste.teste}"/>
+		                <rich:menuGroup value="Save As...">
+		                    <rich:menuItem   submitMode="ajax" value="Text File"  action="#{teste.teste}"/>
+		                    <rich:menuItem   submitMode="ajax" value="PDF File"  action="#{teste.teste}"/>
+		                </rich:menuGroup>
+		                <rich:menuItem  submitMode="ajax" value="Close" action="#{teste.teste}"/>
+		                <rich:menuSeparator id="menuSeparator11"/>
+		                <rich:menuItem  submitMode="ajax" value="Exit"  action="#{teste.teste}"/>
+		                -->
+		                <rich:menuItem submitMode="server" action="#{SistemaBean.listarSistemasInicio}" value="Sistemas" omcomplete="atualizarStatusBotoes();">
+								<f:facet name="icon">
+			                        <h:graphicImage value="/resource/sistema_pequeno.gif" />
+			                    </f:facet>		                
+		                </rich:menuItem>
+		                <rich:menuItem submitMode="server" action="#{FuncaoBean.listarFuncoesInicio}" value="Funções" omcomplete="atualizarStatusBotoes();">
+								<f:facet name="icon">
+			                        <h:graphicImage value="/resource/funcao_pequeno.gif" />
+			                    </f:facet>		                
+		                </rich:menuItem>
+		                <rich:menuItem submitMode="server" action="#{UsuarioBean.listarUsuariosInicio}" value="Usuários" omcomplete="atualizarStatusBotoes();">
+								<f:facet name="icon">
+			                        <h:graphicImage value="/resource/usuario_pequeno.jpg" />
+			                    </f:facet>		                
+		                </rich:menuItem>
+		                <rich:menuItem submitMode="server" reReder="content" action="#{GrupoBean.listarGruposInicio}" value="Grupos" omcomplete="atualizarStatusBotoes();">
+								<f:facet name="icon">
+			                        <h:graphicImage value="/resource/grupo_pequeno.jpg" />
+			                    </f:facet>		                
+		                </rich:menuItem>
+		                <rich:menuItem submitMode="server" action="#{AssociacaoBean.listarAssociacoesInicio}" value="Associações">
+								<f:facet name="icon">
+			                        <h:graphicImage value="/resource/associacoes_pequeno.gif" />
+			                    </f:facet>		                
+		                </rich:menuItem>
+		            </rich:dropDownMenu>
+		        </rich:toolBar>
+		</h:form>
+</div>

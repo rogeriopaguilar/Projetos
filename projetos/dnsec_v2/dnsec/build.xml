@@ -1,0 +1,345 @@
+<!--
+09/01/2006 
+Rogério de Paula Aguilar
+http://www.rogerioaguilar.eti.br
+rogeriopaguilar@terra.com.br
+
+Build para a configuração e execução da aplicação.
+
+Tarefas do build:
+
+*******************************************************************************************************
+clear             -> apaga os diretórios bin(arquivos compilados) 
+		             e deploy (arquivos prontos para distribuir o aplicativo)
+Dependências      -> nenhuma
+*******************************************************************************************************
+
+
+*******************************************************************************************************
+init              -> imprime as configurações do ambiente e cria os diretórios
+		             bin, deploy, deploy/lib, deploy/config
+Dependências      -> nenhuma
+*******************************************************************************************************
+
+
+*******************************************************************************************************
+compilar          -> compila os fontes do projeto para o diretório bin
+Dependências      -> init
+*******************************************************************************************************
+
+
+*******************************************************************************************************
+empacotar         -> cria o arquivo jar principal do projeto e move este arquivo
+			         para o diretório deploy. 
+Dependências      -> compilar
+*******************************************************************************************************
+
+
+*******************************************************************************************************
+executarAplicacao -> Move os arquivos de biblioteca (que estão no diretório lib do 
+					 projeto para o diretório deploy/lib e os arquivos de configuração
+			 		 (que estão no diretório config do projeto) parao diretório deploy/config).
+Dependências      -> empacotar
+*******************************************************************************************************
+
+*******************************************************************************************************
+main              -> reconstrói o projeto e executa a aplicação
+Dependências      -> clear,init,compilar,empacotar,executarAplicacao
+*******************************************************************************************************
+
+-->
+
+<project name="DNSEC" default="main" basedir=".">
+
+	<!--
+		Classpath para compilação dos fontes
+	-->
+	<path id="classpath">
+		<fileset dir="lib" includes="**/*.jar"></fileset>
+		<fileset dir="/opt/java/SDK/lib" includes="javaee.jar"></fileset>
+		
+	</path>
+	
+	<!--
+	*******************************************************************************************************
+	clear             -> apaga os diretórios bin(arquivos compilados) 
+			             e deploy (arquivos prontos para distribuir o aplicativo)
+	Dependências      -> nenhuma
+	*******************************************************************************************************
+	-->
+	<target name="clear">
+		<echo>-----------------------------------------------------------------------</echo>
+		<echo>TARGET: CLEAR</echo>
+		<echo>-----------------------------------------------------------------------</echo>
+		<echo>Apagando diretórios...</echo>
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="bin"/>
+			<fileset dir="deploy"/>
+		</delete>
+		<echo>-----------------------------------------------------------------------</echo>
+	</target>
+	
+	<!--
+	*******************************************************************************************************
+	init              -> imprime as configurações do ambiente e cria os diretórios
+			             bin, deploy, deploy/lib, deploy/config
+	Dependências      -> nenhuma
+	*******************************************************************************************************
+	-->
+	<target name="init">
+		<echo>-----------------------------------------------------------------------</echo>
+		<echo>TARGET: INIT</echo>
+		<echo>Configuração do ambiente</echo>
+		<echo>Versão do jdk: ${java.version}</echo>
+		<echo>Versão do ant: ${ant.version}</echo>
+		<echo>-----------------------------------------------------------------------</echo>
+		<echo>Criando diretório para compilação dos fontes...</echo>
+		<mkdir dir="bin"/>
+		<echo>Criando diretório para deploy da aplicação...</echo>
+		<mkdir dir="deploy"/>
+		<mkdir dir="deploy/lib"/>
+		<mkdir dir="deploy/config"/>
+		<echo>-----------------------------------------------------------------------</echo>
+	</target>
+	
+
+	<!--
+	*******************************************************************************************************
+	compilar          -> compila os fontes do projeto para o diretório bin
+	Dependências      -> init
+	*******************************************************************************************************
+	-->
+	<target name="compilar" depends="init">
+		<echo>-----------------------------------------------------------------------</echo>
+		<echo>TARGET: COMPILAR</echo>
+		<echo>Compilando fontes...</echo>
+		<echo>-----------------------------------------------------------------------</echo>
+		<javac destdir="bin" 
+			   srcdir="src"
+			   classpathref="classpath"
+			   debug="true"
+			   debuglevel="lines,vars,source"
+			   optimize="true">
+		</javac>
+		<echo>-----------------------------------------------------------------------</echo>
+	</target>
+
+
+	<!--
+	*******************************************************************************************************
+	empacotar         -> cria o arquivo jar principal do projeto e move este arquivo
+				         para o diretório deploy. 
+	Dependências      -> compilar
+	*******************************************************************************************************
+	-->
+	<target name="empacotar" depends="compilar">
+		<echo>-----------------------------------------------------------------------</echo>
+		<echo>TARGET: EMPACOTAR</echo>
+		<echo>-----------------------------------------------------------------------</echo>
+		<jar basedir="bin" destfile="deploy/dnsec.jar">
+			<manifest>
+				<attribute 
+					name="Class-Path" 
+					value=" .  
+					lib/cglib-2.1.jar  
+					lib/config.jar  
+					lib/antlr-2.7.5H3.jar   
+					lib/antlr.jar  
+					lib/asm.jar  
+					lib/asm-attrs.jar  
+					lib/c3p0-0.8.4.5.jar  
+					lib/classes12.jar  
+					lib/commons-beanutils.jar  
+					lib/commons-collections-3.2.jar  
+					lib/commons-dbcp-1.2.1.jar  
+					lib/commons-digester.jar  
+					lib/commons-fileupload.jar  
+					lib/commons-lang-2.1.jar  
+					lib/commons-logging.jar  
+					lib/commons-validator.jar  
+					lib/dom4j-1.6.jar  
+					lib/ehcache-1.1.jar  
+					lib/hibernate3.jar  
+					lib/jakarta-oro.jar  
+					lib/jdbc2_0-stdext.jar  
+					lib/jta.jar  
+					lib/log4j-1.2.13.jar  
+					lib/xerces-2.6.2.jar  
+					lib/xml-apis.jar 
+					lib/mysql-connector-java-5.1.2-beta-bin.jar 
+					"/>
+				<attribute 
+					name="Main-Class" 
+					value="dnsec.modulos.principal.business.AppStart"
+				/>
+			</manifest>
+		</jar>
+		
+		<echo>-----------------------------------------------------------------------</echo>
+		
+	</target>
+
+	<!--
+	*******************************************************************************************************
+	empacotar         -> cria o arquivo jar para a aplicação web de exemplo
+				         para o diretório deploy. 
+	Dependências      -> compilar
+	*******************************************************************************************************
+	-->
+	<target name="empacotarWeb" depends="compilar">
+		<echo>-----------------------------------------------------------------------</echo>
+		<echo>TARGET: EMPACOTAR WEB</echo>
+		<echo>-----------------------------------------------------------------------</echo>
+		<jar basedir="bin" destfile="deploy-web/dnsec-filtro-web.war/WEB-INF/lib/dnsec-web.jar">
+		</jar>
+		<copy file="lib/cglib-2.1.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="deploy-web/dnsec-filtro-web.war/WEB-INF/lib/dnsec-web.jar" todir="deploy-web/dnsec-web-aberto.war/WEB-INF/lib"/>
+			<!--
+		<copy file="lib/config.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		-->
+		<copy file="lib/antlr-2.7.5H3.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/antlr.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/asm.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/classes12.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/commons-beanutils.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/commons-collections-3.2.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/commons-dbcp-1.2.1.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/commons-digester.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/commons-fileupload.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/commons-lang-2.1.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/commons-logging.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/commons-validator.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/dom4j-1.6.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/ehcache-1.1.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/hibernate3.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/jakarta-oro.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/jdbc2_0-stdext.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/jta.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/log4j-1.2.13.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/xerces-2.6.2.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/xml-apis.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<copy file="lib/mysql-connector-java-5.1.2-beta-bin.jar" todir="deploy-web/dnsec-filtro-web.war/WEB-INF/lib"/>
+		<echo>-----------------------------------------------------------------------</echo>
+		
+	</target>
+
+	
+	<target name="moverArquivosParaExecucao">
+		<copy todir="deploy/lib">
+			<fileset dir="lib" includes="*.jar"></fileset>
+		</copy>
+		<copy todir="deploy/config/config">
+			<fileset dir="config" includes="**/*"></fileset>
+		</copy> 
+		
+		<jar basedir="deploy/config" destfile="deploy/lib/config.jar"/>
+		<delete includeemptydirs="true">
+			<fileset dir="deploy/config/"/>
+		</delete>
+	</target>
+	
+	
+
+	<!--
+	*******************************************************************************************************
+	executarAplicacao -> Move os arquivos de biblioteca (que estão no diretório lib do 
+						 projeto para o diretório deploy/lib e os arquivos de configuração
+				 		 (que estão no diretório config do projeto) parao diretório deploy/config).
+	Dependências      -> empacotar, moverArquivosParaExecucao
+	*******************************************************************************************************
+	-->
+
+	<target name="executarAplicacao" depends="empacotar, moverArquivosParaExecucao">
+		<echo>-----------------------------------------------------------------------</echo>
+		<echo>TARGET: EXECUTARAPLICACAO</echo>
+		<echo>-----------------------------------------------------------------------</echo>
+		
+		<java spawn="true" dir="deploy" jar="deploy/dnsec.jar" fork="true" > </java>
+		<echo>-----------------------------------------------------------------------</echo>
+	</target>
+
+
+	<target name="javadoc">
+		<javadoc destdir="deploy/javadoc">
+			 <fileset dir="src" defaultexcludes="yes">
+		     </fileset>
+		</javadoc>
+	</target>
+	
+	<!--
+	*******************************************************************************************************
+	main              -> reconstrói o projeto e executa a aplicação
+	Dependências      -> clear,init,compilar,empacotar,executarAplicacao
+	*******************************************************************************************************
+	-->
+	
+	<target name="main" depends="clear,init,compilar,empacotar,executarAplicacao">
+	</target>
+	
+
+	<target name="deployJavaWebStart" depends="clear,init,compilar,empacotar,moverArquivosParaExecucao,assinarJars">
+		<copy todir="deploy-web/dnsec-aberto.war">
+			<fileset dir="deploy"/>
+		</copy>
+		<war destfile="deploy/dnsec.war" webxml="deploy-web/dnsec-aberto.war/WEB-INF/web.xml" basedir="deploy-web/dnsec-aberto.war">
+		</war>
+		<!--
+		<copyfile dest="/mnt/comp-desenv/domains/domain1/autodeploy/dnsec.war" src="deploy/dnsec.war"/>
+		-->
+	</target>
+	
+	
+	<path id="toolslib">
+		 <path location="hibernate-tools/hibernate-tools.jar" />
+		 <path location="hibernate-tools/hibernate3.jar" />
+		 <path location="hibernate-tools/freemarker.jar" />
+		 <fileset dir="lib" includes="**/*.jar"/>
+	</path>
+	   
+	<taskdef name="hibernatetool" 
+	         classname="org.hibernate.tool.ant.HibernateToolTask" 
+	         classpathref="toolslib" />	
+	
+	<!--
+	*******************************************************************************************************
+	gerarDDL          -> cria os comandos ddl para a base de dados
+	Dependências      -> 
+	*******************************************************************************************************
+	-->
+	<target name="gerarDDL">
+	<hibernatetool destdir="deploy/generated">
+	 <classpath>
+	  <path location="bin"/>
+	  <path location="."/>
+	 </classpath>
+	 <configuration configurationfile="config/dnsec-hibernate-cfg-td.xml"/>
+	 <hbm2ddl/>
+		<!-- 
+		<hbm2dao/>
+		 <hbmtemplate
+		  filepattern="{package-name}/I{class-name}Constants.java"
+		  templatepath="${etc.dir}/customtemplates"
+		  template="myconstants.vm"  
+		 />-->
+	</hibernatetool>	
+	</target>
+
+	<!--
+	keytool -genkey -alias dnseccert -keyalg RSA -keysize 1024 -dname "CN=dnsec.com,OU=DNS,O=DNS,L=GRU,S=SP,C=BR" -keypass dnsecpwd -keystore dnsec_keystore.jks -storepass dnsecpwd
+	-->
+	<target name="assinarJars">
+	    <signjar alias="dnseccert" keypass="dnsecpwd" keystore="dnsec_keystore.jks" storepass="dnsecpwd">
+	    	<fileset dir="deploy" includes="**/*.jar">
+	    	</fileset>
+	    </signjar>	
+	</target>
+	
+	<!--
+	<target name="ofuscarCodigo">
+		<taskdef resource="task.properties"
+		         classpath="c:/Documents and Settings/raguilar/Desktop/proguard3.8/proguard3.8/lib/proguard.jar" />
+		<proguard configuration="dnsec.pro" />
+	</target>
+	-->
+	
+</project>

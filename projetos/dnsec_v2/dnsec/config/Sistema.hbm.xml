@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="dnsec.shared.database.hibernate.Sistema" table="SISTEMA">
+		<id name="codSistemaSist" unsaved-value="null">
+			<column name="COD_SISTEMA_SIST" not-null="true" />
+			<generator class="assigned" />
+		</id>
+
+		<property name="descrSistemaSist">
+			<column name="DESCR_SISTEMA_SIST" length="30" not-null="true" />
+		</property>
+
+		<property name="condCadastrarSist">
+			<column name="COND_CADASTRAR_SIST" length="1" not-null="false" />
+		</property>
+
+		<property name="nomeBancoSist">
+			<column name="NOME_BANCO_SIST" length="20" not-null="false" />
+		</property>
+
+		<property name="nomeServidorSist">
+			<column name="NOME_SERVIDOR_SIST" length="25" not-null="false" />
+		</property>
+
+		<property name="tipoBancoSist">
+			<column name="TIPO_BANCO_SIST" length="15" not-null="true" />
+		</property>
+
+		<property name="nomeProprietarioSist">
+			<column name="NOME_PROPRIETARIO_SIST" length="30" not-null="false" />
+		</property>
+
+		<property name="nomeAnalistaRespSist">
+			<column name="NOME_ANALISTA_RESP_SIST" length="20" not-null="false" />
+		</property>
+
+		<!-- Relacionamento entre sistema e função -->	
+		<set name="funcoes" lazy="true" inverse="true"  >
+				<key column="COD_SISTEMA_SIST" not-null="true" />
+				<one-to-many class="dnsec.shared.database.hibernate.Funcao" />
+		</set>	
+		
+		<set name="grupos" table="GRUPO_SISTEMA" lazy="true">
+			<key column="COD_SISTEMA_SIST"/>
+			<many-to-many column="COD_GRUPO_GRUP"  class="dnsec.shared.database.hibernate.Grupo" />
+		</set>
+		
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<ui:composition template="layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:jsp="http://java.sun.com/JSP/Page" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"  
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:bp="http://java.sun.com/blueprints/ui/14"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:define name="title">DNSEC 0.2 - Grupos</ui:define>
+
+<ui:define name="content">
+
+<script>
+	<!--
+		function desabilitarBotoes()
+		{
+			var cmdPesquisar = document.getElementById('frmGrupos:cmdPesquisar');
+			var cmdIncluir = document.getElementById('frmGrupos:cmdIncluir');
+			var cmdExcluir = document.getElementById('frmGrupos:cmdExcluir');
+			var cmdAlterar = document.getElementById('frmGrupos:cmdAlterar');
+			var cmdGravar = document.getElementById('frmGrupos:cmdGravar');
+			cmdPesquisar.disabled = true;
+			cmdIncluir.disabled = true;
+			cmdExcluir.disabled = true;
+			cmdAlterar.disabled = true;
+			cmdGravar.disabled = true;
+		}
+
+		function atualizarStatusBotoes()
+		{
+			var cmdPesquisar = document.getElementById('frmGrupos:cmdPesquisar');
+			var cmdIncluir = document.getElementById('frmGrupos:cmdIncluir');
+			var cmdExcluir = document.getElementById('frmGrupos:cmdExcluir');
+			var cmdAlterar = document.getElementById('frmGrupos:cmdAlterar');
+			var cmdGravar = document.getElementById('frmGrupos:cmdGravar');
+			var metodo = document.getElementById('frmGrupos:METODO').value;
+
+			desabilitarBotoes();
+			//alert(metodo);
+			
+			if('listar' == metodo)
+			{
+				cmdPesquisar.disabled = false;
+				cmdIncluir.disabled = false;
+				cmdExcluir.disabled = false;
+				cmdAlterar.disabled = false;
+				cmdGravar.disabled = true;
+			}else if('prepararInclusao' == metodo)
+			{
+				cmdPesquisar.disabled = true;
+				cmdIncluir.disabled = false;
+				//cmdIncluir.style.background = 'url(resource/cancelar.gif) no-repeat;'; --> não funciona no IE!
+				cmdIncluir.value='Cancelar';
+				cmdExcluir.disabled = true;
+				cmdAlterar.disabled = true;
+				cmdGravar.disabled = false;
+				document.getElementById('frmGrupos:Código').focus();				
+			}else if('prepararEdicao' == metodo)
+			{
+				cmdPesquisar.disabled = true;
+				cmdIncluir.disabled = true;
+				cmdExcluir.disabled = true;
+				cmdAlterar.disabled = false;
+				//cmdAlterar.style.background = 'url(resource/cancelar.gif) no-repeat;'; --> Não funciona no IE!
+				cmdAlterar.value='Cancelar';
+				cmdGravar.disabled = false;
+				document.getElementById('frmGrupos:Código').focus();				
+			}else if('ERRO_NAO_ESPERADO' == metodo)
+			{
+				desabilitarBotoes();
+			}			
+		}
+		
+	// -->
+</script>
+
+   <a4j:form ajaxSubmit="true" id="frmGrupos">
+  
+   <table border="0">
+			<tr>
+				<td>
+					<h:panelGrid id="painelGrupo" columns="2">
+						<h:panelGroup>
+							Código: <h:inputText value="#{GrupoBean.grupoSearchVo.grupo.codGrupoGrup}" id="Código" styleClass="texto"/>
+							Descrição:	<h:inputText value="#{GrupoBean.grupoSearchVo.grupo.descrGrupoGrup}" id="Descrição" styleClass="texto"/>
+						</h:panelGroup>						
+						
+						<h:panelGroup>
+							<center>
+								<h:panelGrid>
+			                        &#x00A0;
+								</h:panelGrid>
+							</center>
+						</h:panelGroup>						
+						
+						
+						<h:panelGroup>
+							 	<a4j:commandButton value="Pesquisar" action="#{GrupoBean.listarGrupos}" reRender="tabelaGrupos, msgErro, scroll" eventQueue="grupoQueue" id="cmdPesquisar" onclick="desabilitarBotoes();" oncomplete="atualizarStatusBotoes();" style="background: url(resource/pesquisar.gif) no-repeat;width:80px;"/>
+							 	<a4j:commandButton value="Incluir" action="#{GrupoBean.prepararInclusao}" reRender="msgErro, painelGrupo" eventQueue="grupoQueue" id="cmdIncluir" onclick="desabilitarBotoes();" oncomplete="atualizarStatusBotoes();" style="background: url(resource/incluir.gif) no-repeat;width:80px;"/>
+							 	<a4j:commandButton value="Excluir" action="#{GrupoBean.excluir}" reRender="tabelaGrupos, msgErro, scroll" eventQueue="grupoQueue" id="cmdExcluir" onclick="desabilitarBotoes();" oncomplete="atualizarStatusBotoes();" style="background: url(resource/excluir.gif) no-repeat;width:80px;"/>
+							 	<a4j:commandButton value="Alterar" action="#{GrupoBean.prepararEdicao}" reRender="msgErro, painelGrupo" eventQueue="grupoQueue" id="cmdAlterar" onclick="desabilitarBotoes();" oncomplete="atualizarStatusBotoes();" style="background: url(resource/alterar.gif) no-repeat;width:80px;" />
+							 	<a4j:commandButton value="Gravar" action="#{GrupoBean.confirmarEdicao}" reRender="msgErro, painelGrupo, tabelaGrupos, scroll" eventQueue="grupoQueue" id="cmdGravar" onclick="desabilitarBotoes();" oncomplete="atualizarStatusBotoes();" style="background: url(resource/confirmar.gif) no-repeat;width:80px;"/>
+					    		 <h:inputHidden value="#{GrupoBean.grupo.codGrupoGrup}" id="grupocodGrupoGrup" />					 
+					    		 <h:inputHidden value="#{GrupoBean.METODO}" id="METODO" />					 
+						</h:panelGroup>
+					</h:panelGrid>	
+					 
+				</td>
+			</tr>
+			
+			<tr>
+					<td> 
+						<div style="height:300px;">
+						<!--
+				            <rich:scrollableDataTable rowKeyVar="rkv"  height="400px" 
+				                width="700px" id="tabelaGrupos" rows="20" 
+				                value="#{GrupoBean.listaGrupos}" var="grupo" sortMode="single">
+						-->
+					            <rich:dataTable 
+					                width="750px"   
+									id="tabelaGrupos" 
+					                value="#{GrupoBean.listaGrupos}" var="grupo" rows="10"
+				    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+				                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+				                    binding="#{GrupoBean.modelo}"			                
+					                >
+
+					                <rich:column style="width:5px;">
+					                    <f:facet name="header">
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                    </f:facet>
+					                    <input type="radio" name="cod" onclick="document.getElementById('frmGrupos:grupocodGrupoGrup').value='${grupo.codGrupoGrup}';"/>
+					                </rich:column>
+
+					                
+					                <rich:column style="width:25px;">
+					                    <f:facet name="header">
+					                    	<h:outputText styleClass="headerText" value="Código" />
+					                    </f:facet>
+				                    	<h:outputText value="#{grupo.codGrupoGrup}"/>
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                </rich:column>
+					
+					                <rich:column >
+					                    <f:facet name="header">
+					                    	<h:outputText styleClass="headerText" value="Descrição"/>
+					                    </f:facet>
+				                    	<h:outputText value="#{grupo.descrGrupoGrup}"/>
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                </rich:column>
+					            </rich:dataTable>
+					       </div>
+			            
+					</td>
+				</tr>
+				<tr>
+				<td align="center">
+						 <rich:datascroller align="center"  for="tabelaGrupos" maxPages="20" id="scroll" />
+				</td>
+				</tr>
+		</table>
+		</a4j:form>
+
+
+		<center>
+			<h:panelGrid id="msgErro" >
+				<h:messages layout="table" errorClass="msgerro"/>					 
+			</h:panelGrid>
+		</center>
+
+
+		
+		<script>
+			<!--
+				atualizarStatusBotoes();
+			//-->
+		</script>
+		
+</ui:define>	
+</ui:composition>
+

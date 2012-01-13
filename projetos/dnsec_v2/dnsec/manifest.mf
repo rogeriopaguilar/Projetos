@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.6.5
+Created-By: 1.4.2_07-b05 (Sun Microsystems Inc.)
+Main-Class: dnsec.modulos.principal.business.AppStart
+Class-Path: 
+ . 
+ lib/cglib-2.1.jar 
+ lib/antlr-2.7.5H3.jar 
+ lib/antlr.jar 
+ asm.jar 
+ lib/asm-attrs.jar 
+ lib/c3p0-0.8.4.5.jar 
+ lib/classes12.jar 
+ lib/commons-beanutils.jar 
+ lib/commons-collections-2.1.1.jar 
+ lib/commons-dbcp-1.2.1.jar 
+ lib/commons-digester.jar 
+ lib/commons-fileupload.jar 
+ lib/commons-lang-2.1.jar 
+ lib/commons-logging.jar 
+ lib/commons-validator.jar 
+ lib/dom4j-1.6.jar 
+ lib/ehcache-1.1.jar 
+ lib/hibernate3.jar 
+ lib/jakarta-oro.jar 
+ lib/jdbc2_0-stdext.jar 
+ lib/jta.jar 
+ lib/log4j-1.2.13.jar 
+ lib/xerces-2.6.2.jar 
+ lib/xml-apis.jar 
+ 
+ 

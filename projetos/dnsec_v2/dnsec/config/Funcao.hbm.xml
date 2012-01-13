@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="dnsec.shared.database.hibernate.Funcao" table="FUNCAO" lazy="true">
+
+		<composite-id
+			name="compId"
+			class="dnsec.shared.database.hibernate.pk.FuncaoPk"
+			>
+			<key-property name="codFuncaoFunc" column="COD_FUNCAO_FUNC"/>
+			<key-property name="codSistemaSist" column="COD_SISTEMA_SIST"/>
+			<!-- <key-many-to-one name="codSistemaSist" class="dnsec.shared.database.hibernate.Sistema" column="COD_SISTEMA_SIST"/> -->
+		</composite-id>
+
+		<property name="nomeFunc">
+			<column name="NOME_FUNC" length="30" not-null="false" />
+		</property>
+
+		<property name="descrFuncaoFunc">
+			<column name="DESCR_FUNCAO_FUNC"/>
+		</property>
+
+		<property name="codSistemaPaiFunc">
+			<column name="COD_SISTEMA_PAI_FUNC" />
+		</property>
+
+		<property name="codFuncaoPaiFunc">
+			<column name="COD_FUNCAO_PAI_FUNC"/>
+		</property>
+
+	    <many-to-one
+	        name="sistema"
+		    class="dnsec.shared.database.hibernate.Sistema"
+		    update="false"
+		    insert="false"
+		    fetch="join"
+		>
+	    	<column name="COD_SISTEMA_SIST" />
+		</many-to-one>
+
+		<set name="funcoesFilhas" lazy="true">
+				<key>
+					<column name="COD_FUNCAO_PAI_FUNC" not-null="true"/>
+					<column name="COD_SISTEMA_SIST" not-null="true"/>
+				</key>
+				<one-to-many class="dnsec.shared.database.hibernate.Funcao"/>
+		</set> 
+
+	   <many-to-one
+	        name="funcaoPai"
+		    class="dnsec.shared.database.hibernate.Funcao"
+		    update="false"
+		    insert="false"
+		    not-found="ignore"
+		    fetch="join"
+		    >
+ 			<column name="COD_FUNCAO_PAI_FUNC" not-null="false" ></column>
+			<column name="COD_SISTEMA_SIST" not-null="false"/> 
+		</many-to-one>
+		
+		<set name="grupos" table="GRUPO_FUNCAO" lazy="true" >
+			<key>
+				<column name="COD_FUNCAO_FUNC"></column>
+				<column name="COD_SISTEMA_SIST"></column>
+			</key>
+			<many-to-many column="COD_GRUPO_GRUP" class="dnsec.shared.database.hibernate.Grupo" />
+		</set> 
+
+	</class>
+</hibernate-mapping>

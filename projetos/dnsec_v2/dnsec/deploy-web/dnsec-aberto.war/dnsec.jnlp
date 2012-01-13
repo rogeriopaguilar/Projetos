@@ -1,0 +1,45 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+   <jnlp codebase="$$codebase">
+     <information>
+         <title>DNSEC</title>
+         <vendor>Amare</vendor>
+         <description>DNSEC</description>
+         <!-- <icon href="images/icon.gif"/> -->
+     </information>
+      <security>
+          <all-permissions/>
+      </security>
+     <resources>
+       <j2se version="1.5+"/>
+       <jar href="dnsec.jar"/>
+       <jar href="lib/config.jar"/>
+       <jar href="lib/cglib-2.1.jar"/> 
+       <jar href="lib/antlr-2.7.5H3.jar"/>   
+       <jar href="lib/antlr.jar"/>  
+       <jar href="lib/asm.jar"/>  
+       <jar href="lib/asm-attrs.jar"/>  
+       <jar href="lib/c3p0-0.8.4.5.jar"/>  
+	    <jar href="lib/classes12.jar"/>  
+        <jar href="lib/commons-beanutils.jar"/>  
+        <jar href="lib/commons-collections-3.2.jar"/>  
+        <jar href="lib/commons-dbcp-1.2.1.jar"/>  
+        <jar href="lib/commons-digester.jar"/>  
+        <jar href="lib/commons-fileupload.jar"/>  
+        <jar href="lib/commons-lang-2.1.jar"/>  
+        <jar href="lib/commons-logging.jar"/>  
+        <jar href="lib/commons-validator.jar"/>  
+        <jar href="lib/discover.jar"/>  
+        <jar href="lib/dom4j-1.6.jar"/>  
+        <jar href="lib/ehcache-1.1.jar"/>  
+        <jar href="lib/hibernate3.jar"/>  
+        <jar href="lib/jakarta-oro.jar"/>  
+        <jar href="lib/jdbc2_0-stdext.jar"/>  
+        <jar href="lib/jta.jar"/>  
+        <jar href="lib/log4j-1.2.13.jar"/>  
+        <jar href="lib/secmodule_abril_sso.jar"/>  
+        <jar href="lib/xerces-2.6.2.jar"/>  
+        <jar href="lib/xml-apis.jar"/> 
+        <jar href="lib/mysql-connector-java-5.1.2-beta-bin.jar"/>
+     </resources>
+      <application-desc main-class="dnsec.modulos.principal.business.AppStart"/>
+   </jnlp>

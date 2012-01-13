@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="dnsec.shared.database.hibernate.TiposBanco" table="TIPOS_BANCO" lazy="true">
+		<id column="COD_TIPO_BANCO" name="codTipoBanco">
+		</id>
+	</class>
+</hibernate-mapping>

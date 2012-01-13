@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="dnsec.shared.database.hibernate.Usuario" table="USUARIO">
+
+
+		<id name="codUsuarioUsua" unsaved-value="null">
+			<column name="COD_USUARIO_USUA" not-null="true" length="30"/>
+			<generator class="assigned" />
+		</id>
+
+		<property name="numChapaFunc" column="NUM_CHAPA_FUNC" length="6" not-null="false" />
+		<property name="nomeUsuarioUsua" column="NOME_USUARIO_USUA" length="30"/>
+		<property name="codSenhaUsua" column="COD_SENHA_USUA" length="30" not-null="false"/>
+		<property name="dataInclusaoUsua" column="DATA_INCLUSAO_USUA" type="timestamp"/>
+		<property name="dataUltAcessoUsua" column="DATA_ULT_ACESSO_USUA" type="timestamp"/>
+		<property name="dataUltAltSenhaUsua" column="DATA_ULT_ALT_SENHA_USUA" type="timestamp"/>
+		<property name="numDiasValidadesenhaUsua" column="NUM_DIAS_VALIDADE_SENHA_USUA" length="3" not-null="false"/>
+		<property name="qtdeErrosLoginUsua" column="QTDE_ERROS_LOGIN_USUA" length="1" not-null="false"/>
+		<property name="condAltSenhaUsua" column="COND_ALT_SENHA_USUA" length="1" not-null="false"/>
+		<property name="numTelefoneUsua" column="NUM_TELEFONE_USUA" length="18" not-null="false"/>
+		<property name="codEmailUsua" column="COD_EMAIL_USUA" length="40" not-null="false"/>
+		<property name="condBloqueadoUsua" column="COND_BLOQUEADO_USUA" length="1" not-null="false"/>
+		<property name="codUsuarioAdabasUsua" column="COD_USUARIO_ADABAS_USUA" length="8" not-null="false"/>
+		<property name="dataSolicNovaSenha" column="DATA_SOLIC_NOVA_SENHA" type="timestamp"/>
+		
+		<set name="grupos" table="GRUPO_USUARIO" lazy="true">
+			<key column="COD_USUARIO_USUA"/>
+			<many-to-many column="COD_GRUPO_GRUP"  class="dnsec.shared.database.hibernate.Grupo"/>
+		</set>
+		
+	</class>
+</hibernate-mapping>

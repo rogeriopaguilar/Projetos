@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<ui:composition template="layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:jsp="http://java.sun.com/JSP/Page" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"  
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:bp="http://java.sun.com/blueprints/ui/14"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:define name="title">DNSEC 0.2 - Associações</ui:define>
+
+<ui:define name="content">
+
+<script>
+	<!--
+		function atualizarDivsPesquisaGrupo(combo)
+		{
+			document.getElementById('frmAssociacoes:codSistemaGrupo').disabled = true;
+			document.getElementById('frmAssociacoes:ieCmdPesquisarFuncoesGrupo').disabled = true;
+			if(combo.selectedIndex==0)
+			{
+				document.getElementById('frmAssociacoes:codSistemaGrupo').disabled = false;
+				document.getElementById('frmAssociacoes:ieCmdPesquisarFuncoesGrupo').disabled = false;
+			}		
+		}
+	
+	// -->
+</script>
+
+<a4j:form ajaxSubmit="true" id="frmAssociacoes">
+
+  <rich:tabPanel switchType="ajax" >
+        <rich:tab label="Sistemas" actionListener="#{AssociacaoBean.tabSistemasSelecionada}" >
+            <div style="height:350px;">
+            	<table border="0" width="750px">
+					<tr>
+						<td>
+			 				<div style="height: 310px; overflow-y: scroll; width:150px;">
+				 				<rich:tree style="width:300px" 
+				                			ajaxSubmitSelection="true"  switchType="client"
+				                			value="#{AssociacaoBean.noRaizSistemas}" var="item"
+				                			nodeSelectListener="#{AssociacaoBean.carregarGruposSistemaSelecionado}" 
+				                			reRender="arvoreSistemas,tabelaGruposDisponiveis,tabelaGruposRelacionados" nodeFace="#{item.tipo}"
+				                			id="arvoreSistemas">
+					            		        <rich:treeNode type="NO_FILHO" iconLeaf="/resource/sistema_pequeno.gif">
+                									<h:outputText value="#{item.sistema.codSistemaSist}" />
+            									</rich:treeNode>
+					            		        <rich:treeNode type="NO_ATUALIZACAO" icon="/resource/refresh.gif" iconLeaf="/resource/refresh.gif">
+					            		        	<h:outputText value="Atulizar árvore"/>
+            									</rich:treeNode>
+	            				</rich:tree>						
+	            			</div>
+						</td>
+						<td>
+							Grupos disponíveis:<br/>
+			 				<div style="height: 300px; overflow-y: scroll; width:300px;">
+								<rich:panel style="height: 290px;">
+									<rich:dropSupport acceptedTypes="grupoRelacionado" dropListener="#{AssociacaoBean.transferirSistemaSelecionadoParaDisponivel}" reRender="tabelaGruposDisponiveis,tabelaGruposRelacionados" eventsQueue="associacaoQueue"/>
+						            <rich:dataTable 
+						                id="tabelaGruposDisponiveis" 
+						                value="#{AssociacaoBean.listaGruposDisponiveis}" var="grupo"
+					    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					                    >
+					                   <rich:column style="width:290px;">
+													<a4j:outputPanel>				                			
+						            		        	<h:graphicImage value="/resource/grupo_pequeno.jpg"/>
+														<h:outputText value="#{grupo.codGrupoGrup}"/>	
+														<rich:dragSupport dragType="grupoDisponivel" dragValue="#{grupo}" eventsQueue="associacaoQueue"/>
+													</a4j:outputPanel>					                   
+					                   </rich:column> 			                
+					                </rich:dataTable>
+					             </rich:panel>
+	            			</div>
+						</td>
+						<td>
+							Grupos relacionados:<br/>
+			 				<div style="height: 300px; overflow-y: scroll; width:300px;">
+
+								<rich:panel style="height: 290px;">
+									<rich:dropSupport acceptedTypes="grupoDisponivel" dropListener="#{AssociacaoBean.transferirSistemaDisponivelParaSelecionado}" reRender="tabelaGruposDisponiveis,tabelaGruposRelacionados" eventsQueue="associacaoQueue"/>
+						            <rich:dataTable 
+						                id="tabelaGruposRelacionados" 
+						                value="#{AssociacaoBean.listaGruposRelacionados}" var="grupo"
+					    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					                    >
+					                   <rich:column style="width:290px;">
+													<a4j:outputPanel>				                			
+						            		        	<h:graphicImage value="/resource/grupo_pequeno.jpg"/>
+														<h:outputText value="#{grupo.codGrupoGrup}"/>	
+														<rich:dragSupport dragType="grupoRelacionado" dragValue="#{grupo}" eventsQueue="associacaoQueue"/>
+													</a4j:outputPanel>					                   
+					                   </rich:column> 			                
+					                </rich:dataTable>
+					             </rich:panel>
+	            			</div>
+						</td>
+						
+					</tr>	            	
+					<tr>
+						<td colspan="3" align="right">
+						<br/>
+						 	<a4j:commandButton value="Salvar" action="#{AssociacaoBean.salvarRelacionamentos}" reRender="msgErro" eventQueue="associacaoQueue" id="ieCmdSalvar" onclick="document.getElementById('frmAssociacoes:ieCmdSalvar').disabled=true;" oncomplete="document.getElementById('frmAssociacoes:ieCmdSalvar').disabled=false;" style="background: url(resource/confirmar.gif) no-repeat;width:80px;"/>
+						</td>
+					</tr>
+            	</table>
+            </div>
+        </rich:tab>
+        <rich:tab label="Grupos" actionListener="#{AssociacaoBean.tabGruposSelecionada}">
+            <div style="height:350px;">
+            	<table border="0" width="750px">
+					<tr>
+						<td>
+			 				<div style="height: 310px; overflow-y: scroll; width:150px;">
+				 				<rich:tree style="width:300px" 
+				                			ajaxSubmitSelection="true"  switchType="client"
+				                			value="#{AssociacaoBean.noRaizGrupos}" var="item"
+				                			nodeSelectListener="#{AssociacaoBean.carregarDadosGrupoSelecionado}" 
+				                			reRender="arvoreGrupos,tabelaDisponiveisGrupo,tabelaRelacionadosGrupo" nodeFace="#{item.tipo}"
+				                			id="arvoreGrupos">
+					            		        <rich:treeNode type="NO_RAIZ">
+                									<h:outputText value="Grupos" />
+            									</rich:treeNode>
+					            		        <rich:treeNode type="NO_FILHO" iconLeaf="/resource/grupo_pequeno.jpg">
+                									<h:outputText value="#{item.grupo.codGrupoGrup}" />
+            									</rich:treeNode>
+					            		        <rich:treeNode type="NO_ATUALIZACAO" icon="/resource/refresh.gif" iconLeaf="/resource/refresh.gif">
+					            		        	<h:outputText value="Atulizar árvore"/>
+            									</rich:treeNode>
+	            				</rich:tree>						
+	            			</div>
+						</td>
+						<td>
+								Exibir:<h:selectOneMenu value="#{AssociacaoBean.tipoCarregamentoGrupo}" onclick="document.getElementById('frmAssociacoes:ieCmdSalvarGrupo').disabled=true;atualizarDivsPesquisaGrupo(this);" id="tipoCarregamentoGrupo" styleClass="texto">
+										  <a4j:support event="onchange"  oncomplete="document.getElementById('frmAssociacoes:ieCmdSalvarGrupo').disabled=false;" reRender="tabelaDisponiveisGrupo,tabelaRelacionadosGrupo" action="#{AssociacaoBean.tipoCarregamentoGrupoAlterado}"/>
+										<f:selectItem itemLabel="Funções" itemValue="1"/>
+										<f:selectItem itemLabel="Sistemas" itemValue="2"/>
+										<f:selectItem itemLabel="Usuários" itemValue="3"/>
+									  </h:selectOneMenu>	
+										Sistema: <h:selectOneMenu value="#{AssociacaoBean.codSistemaSelecionadoGrupo}" styleClass="texto" id="codSistemaGrupo">
+												 	<f:selectItems value="#{AssociacaoBean.listaSistemasSelect}"/>
+												 </h:selectOneMenu>
+ 										<br/>
+							<div id="divTituloDisponiveisGrupo"></div> disponíveis:<br/>
+			 				<div style="height: 280px; overflow-y: scroll; width:300px;">
+								<rich:panel style="height: 270px;">
+									<rich:dropSupport acceptedTypes="objetoGrupoRelacionado" dropListener="#{AssociacaoBean.transferirObjetoGrupoSelecionadoParaDisponivel}" reRender="msgErro,tabelaDisponiveisGrupo,tabelaRelacionadosGrupo" eventsQueue="associacaoQueue"/>
+						            <rich:dataTable 
+						                id="tabelaDisponiveisGrupo" 
+						                value="#{AssociacaoBean.listaDisponiveisGrupo}" var="obj"
+					    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					                    >
+					                   <rich:column style="width:290px;">
+													<a4j:outputPanel>				            
+					            		        			<h:graphicImage value="/resource/sistema_pequeno.gif" rendered="#{not empty obj.sistema}"/>
+															<h:outputText value="#{obj.sistema.codSistemaSist}" rendered="#{not empty obj.sistema}"/>	
+					            		        			<h:graphicImage value="/resource/usuario_pequeno.jpg" rendered="#{not empty obj.usuario}"/>
+															<h:outputText value="#{obj.usuario.codUsuarioUsua} - #{obj.usuario.nomeUsuarioUsua}" rendered="#{not empty obj.usuario}"/>	
+					            		        			<h:graphicImage value="/resource/funcao_pequeno.gif" rendered="#{not empty obj.funcao}"/>
+															<h:outputText value="#{obj.funcao.compId.codFuncaoFunc} - #{obj.funcao.nomeFunc}" rendered="#{not empty obj.funcao}"/>	
+															<rich:dragSupport dragType="objetoGrupoDisponivel" dragValue="#{obj}" eventsQueue="associacaoQueue"/>
+													</a4j:outputPanel>					                   
+					                   </rich:column> 			                
+					                </rich:dataTable>
+					             </rich:panel>
+	            			</div>
+						</td>
+						<td>
+						 	<a4j:commandButton value="Pesquisar Funções Disponíveis e relacionadas" action="#{AssociacaoBean.carregarFuncoesGrupo}" reRender="msgErro, tabelaDisponiveisGrupo, tabelaRelacionadosGrupo" eventQueue="associacaoQueue" id="ieCmdPesquisarFuncoesGrupo" onclick="document.getElementById('frmAssociacoes:ieCmdPesquisarFuncoesGrupo').disabled=true;document.getElementById('frmAssociacoes:ieCmdSalvarGrupo').disabled=true;" oncomplete="document.getElementById('frmAssociacoes:ieCmdPesquisarFuncoesGrupo').disabled=false;document.getElementById('frmAssociacoes:ieCmdSalvarGrupo').disabled=false;" style="background: url(resource/pesquisar.gif) no-repeat;"/>
+							<div id="divTituloRelacionadosGrupo"></div> relacionados:<br/>
+			 				<div style="height: 280px; overflow-y: scroll; width:300px;">
+								<rich:panel style="height: 270px;">
+									<rich:dropSupport acceptedTypes="objetoGrupoDisponivel" dropListener="#{AssociacaoBean.transferirObjetoGrupoDisponivelParaSelecionado}" reRender="msgErro,tabelaDisponiveisGrupo,tabelaRelacionadosGrupo" eventsQueue="associacaoQueue"/>
+						            <rich:dataTable 
+						                id="tabelaRelacionadosGrupo" 
+						                value="#{AssociacaoBean.listaRelacionadosGrupo}" var="obj"
+					    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					                    >
+					                   <rich:column style="width:290px;">
+													<a4j:outputPanel>				            
+					            		        			<h:graphicImage value="/resource/sistema_pequeno.gif" rendered="#{not empty obj.sistema}"/>
+															<h:outputText value="#{obj.sistema.codSistemaSist}" rendered="#{not empty obj.sistema}"/>	
+					            		        			<h:graphicImage value="/resource/usuario_pequeno.jpg" rendered="#{not empty obj.usuario}"/>
+															<h:outputText value="#{obj.usuario.codUsuarioUsua} - #{obj.usuario.nomeUsuarioUsua}" rendered="#{not empty obj.usuario}"/>	
+					            		        			<h:graphicImage value="/resource/funcao_pequeno.gif" rendered="#{not empty obj.funcao}"/>
+															<h:outputText value="#{obj.funcao.compId.codFuncaoFunc} - #{obj.funcao.nomeFunc}" rendered="#{not empty obj.funcao}"/>	
+															<rich:dragSupport dragType="objetoGrupoRelacionado" dragValue="#{obj}" eventsQueue="associacaoQueue"/>
+													</a4j:outputPanel>					                   
+					                   </rich:column> 			                
+					                </rich:dataTable>
+					             </rich:panel>
+	            			</div>
+						</td>
+						
+					</tr>	            	
+					<tr>
+						<td colspan="3" align="right">
+						<br/>
+						 	<a4j:commandButton value="Salvar" action="#{AssociacaoBean.salvarRelacionamentosGrupo}" reRender="msgErro,tabelaDisponiveisGrupo,tabelaRelacionadosGrupo" eventQueue="associacaoQueue" id="ieCmdSalvarGrupo" onclick="document.getElementById('frmAssociacoes:ieCmdSalvarGrupo').disabled=true;" oncomplete="document.getElementById('frmAssociacoes:ieCmdSalvarGrupo').disabled=false;" style="background: url(resource/confirmar.gif) no-repeat;width:80px;"/>
+						</td>
+					</tr>
+            	</table>
+            </div>
+        </rich:tab>
+        <rich:tab label="Usuarios" actionListener="#{AssociacaoBean.tabUsuariosSelecionada}">
+            <div style="height:350px;">
+            	<table border="0" width="750px">
+					<tr>
+						<td>
+			 				<div style="height: 310px; overflow-y: scroll; width:150px;">
+				 				<rich:tree style="width:300px" 
+				                			ajaxSubmitSelection="true"  switchType="client"
+				                			value="#{AssociacaoBean.noRaizUsuarios}" var="item"
+				                			nodeSelectListener="#{AssociacaoBean.carregarGruposUsuarioSelecionado}" 
+				                			reRender="arvoreUsuarios,tabelaGruposDisponiveisUsuario,tabelaGruposRelacionadosUsuario" nodeFace="#{item.tipo}"
+				                			id="arvoreUsuarios">
+					            		        <rich:treeNode type="NO_RAIZ">
+                									<h:outputText value="Usuários" />
+            									</rich:treeNode>
+					            		        <rich:treeNode type="NO_FILHO" iconLeaf="/resource/sistema_pequeno.gif">
+                									<h:outputText value="#{item.usuario.codUsuarioUsua}" />
+            									</rich:treeNode>
+					            		        <rich:treeNode type="NO_ATUALIZACAO" icon="/resource/refresh.gif" iconLeaf="/resource/refresh.gif">
+					            		        	<h:outputText value="Atualizar árvore"/>
+            									</rich:treeNode>
+	            				</rich:tree>						
+	            			</div>
+						</td>
+						<td>
+							Grupos disponíveis:<br/>
+			 				<div style="height: 300px; overflow-y: scroll; width:300px;">
+								<rich:panel style="height: 290px;">
+									<rich:dropSupport acceptedTypes="grupoRelacionadoUsuario" dropListener="#{AssociacaoBean.transferirGrupoSelecionadoParaDisponivelUsuario}" reRender="tabelaGruposDisponiveisUsuario,tabelaGruposRelacionadosUsuario" eventsQueue="associacaoQueue"/>
+						            <rich:dataTable 
+						                id="tabelaGruposDisponiveisUsuario" 
+						                value="#{AssociacaoBean.listaGruposDisponiveisUsuario}" var="grupo"
+					    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					                    >
+					                   <rich:column style="width:290px;">
+													<a4j:outputPanel>				                			
+						            		        	<h:graphicImage value="/resource/grupo_pequeno.jpg"/>
+														<h:outputText value="#{grupo.codGrupoGrup}"/>	
+														<rich:dragSupport dragType="grupoDisponivelUsuario" dragValue="#{grupo}" eventsQueue="associacaoQueue"/>
+													</a4j:outputPanel>					                   
+					                   </rich:column> 			                
+					                </rich:dataTable>
+					             </rich:panel>
+	            			</div>
+						</td>
+						<td>
+							Grupos relacionados:<br/>
+			 				<div style="height: 300px; overflow-y: scroll; width:300px;">
+								<rich:panel style="height: 290px;">
+									<rich:dropSupport acceptedTypes="grupoDisponivelUsuario" dropListener="#{AssociacaoBean.transferirGrupoDisponivelParaSelecionadoUsuario}" reRender="tabelaGruposDisponiveisUsuario,tabelaGruposRelacionadosUsuario" eventsQueue="associacaoQueue"/>
+						            <rich:dataTable 
+						                id="tabelaGruposRelacionadosUsuario" 
+						                value="#{AssociacaoBean.listaGruposRelacionadosUsuario}" var="grupo"
+					    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					                    >
+					                   <rich:column style="width:290px;">
+													<a4j:outputPanel>				                			
+						            		        	<h:graphicImage value="/resource/grupo_pequeno.jpg"/>
+														<h:outputText value="#{grupo.codGrupoGrup}"/>	
+														<rich:dragSupport dragType="grupoRelacionadoUsuario" dragValue="#{grupo}" eventsQueue="associacaoQueue"/>
+													</a4j:outputPanel>					                   
+					                   </rich:column> 			                
+					                </rich:dataTable>
+					             </rich:panel>
+	            			</div>
+						</td>
+						
+					</tr>	            	
+					<tr>
+						<td colspan="3" align="right">
+						<br/>
+						 	<a4j:commandButton value="Salvar" action="#{AssociacaoBean.salvarRelacionamentosUsuario}" reRender="msgErro" eventQueue="associacaoQueue" id="ieCmdSalvarUsuario" onclick="document.getElementById('frmAssociacoes:ieCmdSalvarUsuario').disabled=true;" oncomplete="document.getElementById('frmAssociacoes:ieCmdSalvarUsuario').disabled=false;" style="background: url(resource/confirmar.gif) no-repeat;width:80px;"/>
+						</td>
+					</tr>
+            	</table>
+            </div>
+        </rich:tab>
+        <rich:tab label="Funções" actionListener="#{AssociacaoBean.tabFuncoesSelecionada}">
+            <div style="height:350px;">
+            	<table border="0" width="750px">
+					<tr>
+						<td>
+			 				<div style="height: 310px; overflow-y: scroll; width:150px;">
+				 				<rich:tree style="width:300px" 
+				                			ajaxSubmitSelection="true"  switchType="client"
+				                			value="#{AssociacaoBean.noRaizFuncoes}" var="item"
+				                			nodeSelectListener="#{AssociacaoBean.carregarGruposFuncaoSelecionada}" 
+				                			reRender="arvoreFuncoes,tabelaGruposDisponiveisFuncao,tabelaGruposRelacionadosFuncao" nodeFace="#{item.tipo}"
+				                			id="arvoreFuncoes">
+					            		        <rich:treeNode type="NO_RAIZ">
+                									<h:outputText value="Funções" />
+            									</rich:treeNode>
+					            		        <rich:treeNode type="NO_FILHO" iconLeaf="/resource/funcao_pequeno.gif">
+                									<h:outputText value="#{item.funcao.compId.codFuncaoFunc}" />-<h:outputText value="#{item.funcao.nomeFunc}"/>
+            									</rich:treeNode>
+					            		        <rich:treeNode type="NO_ATUALIZACAO" icon="/resource/refresh.gif" iconLeaf="/resource/refresh.gif">
+					            		        	<h:outputText value="Atualizar árvore"/>
+            									</rich:treeNode>
+					            		        <rich:treeNode type="NO_SISTEMA" icon="/resource/sistema_pequeno.gif">
+                									<h:outputText value="#{item.sistema.codSistemaSist}" />
+            									</rich:treeNode>
+	            				</rich:tree>						
+	            			</div>
+						</td>
+						<td>
+							Grupos disponíveis:<br/>
+			 				<div style="height: 300px; overflow-y: scroll; width:300px;">
+								<rich:panel style="height: 290px;">
+									<rich:dropSupport acceptedTypes="grupoRelacionadoFuncao" dropListener="#{AssociacaoBean.transferirGrupoSelecionadoParaDisponivelFuncao}" reRender="tabelaGruposDisponiveisFuncao,tabelaGruposRelacionadosFuncao" eventsQueue="associacaoQueue"/>
+						            <rich:dataTable 
+						                id="tabelaGruposDisponiveisFuncao" 
+						                value="#{AssociacaoBean.listaGruposDisponiveisFuncao}" var="grupo"
+					    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					                    >
+					                   <rich:column style="width:290px;">
+													<a4j:outputPanel>				                			
+						            		        	<h:graphicImage value="/resource/grupo_pequeno.jpg"/>
+														<h:outputText value="#{grupo.codGrupoGrup}"/>	
+														<rich:dragSupport dragType="grupoDisponivelFuncao" dragValue="#{grupo}" eventsQueue="associacaoQueue"/>
+													</a4j:outputPanel>					                   
+					                   </rich:column> 			                
+					                </rich:dataTable>
+					             </rich:panel>
+	            			</div>
+						</td>
+						<td>
+							Grupos relacionados:<br/>
+			 				<div style="height: 300px; overflow-y: scroll; width:300px;">
+								<rich:panel style="height: 290px;">
+									<rich:dropSupport acceptedTypes="grupoDisponivelFuncao" dropListener="#{AssociacaoBean.transferirGrupoDisponivelParaSelecionadoFuncao}" reRender="tabelaGruposDisponiveisFuncao,tabelaGruposRelacionadosFuncao" eventsQueue="associacaoQueue"/>
+						            <rich:dataTable 
+						                id="tabelaGruposRelacionadosFuncao" 
+						                value="#{AssociacaoBean.listaGruposRelacionadosFuncao}" var="grupo"
+					    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+					                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+					                    >
+					                   <rich:column style="width:290px;">
+													<a4j:outputPanel>				                			
+						            		        	<h:graphicImage value="/resource/grupo_pequeno.jpg"/>
+														<h:outputText value="#{grupo.codGrupoGrup}"/>	
+														<rich:dragSupport dragType="grupoRelacionadoFuncao" dragValue="#{grupo}" eventsQueue="associacaoQueue"/>
+													</a4j:outputPanel>					                   
+					                   </rich:column> 			                
+					                </rich:dataTable>
+					             </rich:panel>
+	            			</div>
+						</td>
+						
+					</tr>	            	
+					<tr>
+						<td colspan="3" align="right">
+						<br/>
+						 	<a4j:commandButton value="Salvar" action="#{AssociacaoBean.salvarRelacionamentosFuncao}" reRender="msgErro" eventQueue="associacaoQueue" id="ieCmdSalvarFuncao" onclick="document.getElementById('frmAssociacoes:ieCmdSalvarFuncao').disabled=true;" oncomplete="document.getElementById('frmAssociacoes:ieCmdSalvarFuncao').disabled=false;" style="background: url(resource/confirmar.gif) no-repeat;width:80px;"/>
+						</td>
+					</tr>
+            	</table>
+            </div>
+        </rich:tab>
+    </rich:tabPanel>
+
+</a4j:form>
+
+
+
+
+
+		<center>
+			<h:panelGrid id="msgErro" >
+				<h:messages layout="table" errorClass="msgerro"/>					 
+			</h:panelGrid>
+		</center>
+
+		<script>
+			<!--
+
+
+				//atualizarStatusBotoes();
+			//-->
+		</script>
+		
+</ui:define>	
+</ui:composition>
+

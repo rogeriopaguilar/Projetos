@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<jsp:root
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:jsp="http://java.sun.com/JSP/Page" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"  
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:bp="http://java.sun.com/blueprints/ui/14"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	>
+			
+			<ui:composition template="layout.xhtml">
+			
+			<ui:define name="title">DNSEC 0.2 - Funções</ui:define>
+			
+			<ui:define name="content">
+
+			<script>
+				<!--
+					
+					var tipoAbertura = -1;
+					var metodoAnterior = '';
+					
+					function desabilitarBotoesFuncoes()
+					{
+						var cmdFuncaoPesquisar = document.getElementById('frmFuncoes:cmdFuncaoPesquisar');
+						var cmdFuncaoIncluir = document.getElementById('frmFuncoes:cmdFuncaoIncluir');
+						var cmdFuncaoExcluir = document.getElementById('frmFuncoes:cmdFuncaoExcluir');
+						var cmdFuncaoAlterar = document.getElementById('frmFuncoes:cmdFuncaoAlterar');
+						//var cmdFuncaoGravar = document.getElementById('frmFuncoes:cmdFuncaoGravar');
+						cmdFuncaoPesquisar.disabled = true;
+						cmdFuncaoIncluir.disabled = true;
+						cmdFuncaoExcluir.disabled = true;
+						cmdFuncaoAlterar.disabled = true;
+						//cmdFuncaoGravar.disabled = true;
+					}
+			
+					function atualizarStatusBotoesFuncoes()
+					{
+						var cmdFuncaoPesquisar = document.getElementById('frmFuncoes:cmdFuncaoPesquisar');
+						var cmdFuncaoIncluir = document.getElementById('frmFuncoes:cmdFuncaoIncluir');
+						var cmdFuncaoExcluir = document.getElementById('frmFuncoes:cmdFuncaoExcluir');
+						var cmdFuncaoAlterar = document.getElementById('frmFuncoes:cmdFuncaoAlterar');
+						//var cmdFuncaoGravar = document.getElementById('frmFuncoes:cmdFuncaoGravar');
+						var metodo = document.getElementById('frmFuncoes:METODO').value;
+			
+						desabilitarBotoesFuncoes();
+						//alert(metodo);
+						
+						if('listar' == metodo)
+						{
+							cmdFuncaoPesquisar.disabled = false;
+							cmdFuncaoIncluir.disabled = false;
+							cmdFuncaoExcluir.disabled = false;
+							cmdFuncaoAlterar.disabled = false;
+							//cmdFuncaoGravar.disabled = true;
+						}else if('prepararInclusao' == metodo)
+						{
+							cmdFuncaoPesquisar.disabled = true;
+							cmdFuncaoIncluir.disabled = true;
+							cmdFuncaoExcluir.disabled = true;
+							cmdFuncaoAlterar.disabled = true;
+							//cmdFuncaoGravar.disabled = true;
+							document.getElementById('frmFuncoes:Codigo').focus();				
+							document.getElementById('cmdIEFuncaoPesquisarSistema').disabled = false;
+							document.getElementById('cmdIEFuncaoPesquisarSistemaPai').disabled = false;
+							document.getElementById('cmdIEFuncaoPesquisarFuncaoPai').disabled = false;
+						}else if('prepararEdicao' == metodo)
+						{
+							cmdFuncaoPesquisar.disabled = true;
+							cmdFuncaoIncluir.disabled = true;
+							cmdFuncaoExcluir.disabled = true;
+							cmdFuncaoAlterar.disabled = true;
+							//cmdFuncaoGravar.disabled = true;
+							document.getElementById('frmFuncoes:Codigo').focus();
+							document.getElementById('cmdIEFuncaoPesquisarSistema').disabled = true;
+							document.getElementById('cmdIEFuncaoPesquisarSistemaPai').disabled = true;
+							document.getElementById('cmdIEFuncaoPesquisarFuncaoPai').disabled = true;
+						}else if('ERRO_NAO_ESPERADO' == metodo)
+						{
+							desabilitarBotoesFuncoes();
+						}			
+						
+						//O botão de pesquisa do painel de sistemas deve sempre estar habilitado, os outros são escondidos
+						var cmdSistemaPesquisar = document.getElementById('frmSistemas:cmdPesquisar');
+						var cmdSistemaIncluir = document.getElementById('frmSistemas:cmdIncluir');
+						var cmdSistemaExcluir = document.getElementById('frmSistemas:cmdExcluir');
+						var cmdSistemaAlterar = document.getElementById('frmSistemas:cmdAlterar');
+						if(cmdSistemaPesquisar) cmdSistemaPesquisar.disabled = false;
+						if(cmdSistemaIncluir) cmdSistemaIncluir.style.display = 'none';
+						if(cmdSistemaExcluir) cmdSistemaExcluir.style.display = 'none';
+						if(cmdSistemaAlterar) cmdSistemaAlterar.style.display = 'none';
+
+					}
+				
+					function exibirTelaInclusaoEdicaoFuncoes()
+					{
+						desabilitarBotoesFuncoes();
+					}
+					
+					function callbackInserirFuncoes()
+					{
+						var metodo = document.getElementById('frmFuncoes:METODO').value;
+						if('prepararInclusao' != metodo && 'prepararEdicao' != metodo){
+							fecharTelaInclusaoEdicaoFuncoes();
+							return;
+						}else{
+						}if('prepararInclusao' == metodo)
+						{
+							titulo = 'Funções - Inclusão';
+							document.getElementById('frmFuncoes:ieCodigoFuncao').disabled=false;
+						}else{
+							titulo = 'Funções - Edição';
+							document.getElementById('frmFuncoes:ieCodigoFuncao').disabled=true;
+						}
+						document.getElementById('divTituloFuncao').innerHTML = titulo;
+						document.getElementById('divPainelInclusaoEdicaoFuncoes').style.display = 'block';
+						document.getElementById('divPainelTabelaFuncoes').style.display = 'none';
+						document.getElementById('divPainelBuscaFuncoes').style.display = 'none';
+						document.getElementById('divScrollFuncoes').style.display = 'none';
+						document.getElementById('divPesquisaSistemaFuncao').style.display = 'none';
+						atualizarStatusBotoesFuncoes();
+					}
+			
+					function fecharTelaInclusaoEdicaoFuncoes()
+					{
+						document.getElementById('divPainelInclusaoEdicaoFuncoes').style.display = 'none';
+						document.getElementById('divPainelTabelaFuncoes').style.display = 'block';
+						document.getElementById('divPainelBuscaFuncoes').style.display = 'block';
+						document.getElementById('divScrollFuncoes').style.display = 'block';
+						document.getElementById('frmFuncoes:METODO').value = 'listar';
+						atualizarStatusBotoesFuncoes();
+					}
+					
+					function callcackConfirmarInclusaoEdicaoFuncoes()
+					{
+						var metodo = document.getElementById('frmFuncoes:METODO').value;
+						//alert(metodo);
+						if('listar' == metodo)
+						{
+							fecharTelaInclusaoEdicaoFuncoes();
+						}
+						atualizarStatusBotoesFuncoes();			
+					}
+					
+					
+					
+					function callBackPesquisaSistemaSistemaSelecionado(codSistemaSelecionado){
+						var metodo = document.getElementById('frmFuncoes:METODO').value;
+						document.getElementById('divPesquisaSistemaFuncao').style.display = 'none';
+						if(metodoAnterior != '') metodo = 'listar';
+						//alert(metodo);
+						//alert(tipoAbertura);						
+						if(metodo == 'listar')
+						{
+							document.getElementById('divControlesCadastroFuncoes').style.display = 'block';
+							document.getElementById('divCodSistemaSelecionado').innerHTML = codSistemaSelecionado;
+							document.getElementById('frmFuncoes:codSistemaSelecionadoFuncaoPesquisa').value = codSistemaSelecionado;
+						}else{
+							if(tipoAbertura == 0)
+							{
+								document.getElementById('divPainelInclusaoEdicaoFuncoes').style.display = 'block';
+								document.getElementById('frmFuncoes:ieCodSistemaFuncao').value = codSistemaSelecionado;
+								document.getElementById('ieCodSistemaFuncaoTMP').value = codSistemaSelecionado;
+								document.getElementById('frmFuncoes:pkcodSistemaSelecionadoFuncaoPesquisa').value = codSistemaSelecionado;
+								//alert(document.getElementById('frmFuncoes:pkcodSistemaSelecionadoFuncaoPesquisa').value);
+							}else if(tipoAbertura == 1){
+								document.getElementById('divPainelInclusaoEdicaoFuncoes').style.display = 'block';
+								document.getElementById('frmFuncoes:ieCodSistemaPaiFuncao').value = codSistemaSelecionado;
+								document.getElementById('ieCodSistemaPaiFuncaoTMP').value = codSistemaSelecionado;
+							}else{
+								alert('ERRO - Tipo de abertura inválido!');
+							}
+						}
+					}
+					
+							 					
+					function abrirTelaSelecaoSistema()
+					{
+						var metodo = document.getElementById('frmFuncoes:METODO').value;
+						if(metodoAnterior != '') metodo = 'listar';
+						//alert(metodo);
+
+						
+						if(metodo == 'listar')
+						{						
+							if(document.getElementById('frmFuncoes:codSistemaSelecionadoFuncaoPesquisa').value == '')
+							{
+								document.getElementById('divPesquisaSistemaFuncao').style.display = 'block';
+								document.getElementById('divControlesCadastroFuncoes').style.display = 'none';
+							}else{
+								document.getElementById('divCodSistemaSelecionado').innerHTML = '';
+								document.getElementById('frmFuncoes:codSistemaSelecionadoFuncaoPesquisa').value = '';
+							}
+						}else if('prepararInclusao' == metodo)
+						{
+							tipoAbertura = arguments[0];
+							//alert(tipoAbertura);
+							if(tipoAbertura == 0)
+							{
+								if(document.getElementById('frmFuncoes:ieCodSistemaFuncao').value == '')
+								{
+									document.getElementById('divPesquisaSistemaFuncao').style.display = 'block';
+									document.getElementById('divPainelInclusaoEdicaoFuncoes').style.display = 'none';
+								}else{
+									document.getElementById('frmFuncoes:ieCodSistemaFuncao').value = '';
+									document.getElementById('ieCodSistemaFuncaoTMP').value = '';
+								}
+							}else{
+								if(document.getElementById('frmFuncoes:ieCodSistemaPaiFuncao').value == '')
+								{
+									document.getElementById('divPesquisaSistemaFuncao').style.display = 'block';
+									document.getElementById('divPainelInclusaoEdicaoFuncoes').style.display = 'none';
+								}else{
+									document.getElementById('frmFuncoes:ieCodSistemaPaiFuncao').value = '';
+									document.getElementById('ieCodSistemaPaiFuncaoTMP').value = '';
+								}
+							}
+						}else{
+							alert('Erro - Método ' + metodo + ' não esperado neste momento!');
+						}
+						
+					}
+					
+					function setarFuncaoSelecionada(codFuncao, codSistema, codSistemaPai)
+					{
+						document.getElementById('frmFuncoes:codFuncaoFuncSelecionada').value=codFuncao;					
+						document.getElementById('frmFuncoes:codSistemaFuncaoFuncSelecionada').value=codSistema;					
+						
+						if(callBackFuncaoSelecionada)
+						{
+							callBackFuncaoSelecionada(codFuncao, codSistema, codSistemaPai);
+						}						
+					}
+					
+					function abrirTelaPesquisaFuncaoPai()
+					{
+						if(document.getElementById('frmFuncoes:ieFuncaoPaiCodFuncao').value=='')
+						{					
+
+
+							document.getElementById('divPainelInclusaoEdicaoFuncoes').style.display = 'none';
+							document.getElementById('divPainelTabelaFuncoes').style.display = 'block';
+							document.getElementById('divPainelBuscaFuncoes').style.display = 'block';
+							document.getElementById('divScrollFuncoes').style.display = 'block';
+
+	
+							desabilitarBotoesFuncoes();
+							var cmdFuncaoPesquisar = document.getElementById('frmFuncoes:cmdFuncaoPesquisar');
+							metodoAnterior = document.getElementById('frmFuncoes:METODO').value;
+							//alert(metodoAnterior);
+
+							cmdFuncaoPesquisar.disabled = false;						
+
+							callBackFuncaoSelecionada = function(){
+								document.getElementById('frmFuncoes:ieFuncaoPaiCodFuncao').value=arguments[0];					
+								document.getElementById('ieFuncaoPaiCodFuncaoTMP').value=arguments[0];					
+								document.getElementById('frmFuncoes:ieFuncaoPaiCodSistema').value=arguments[1];					
+								document.getElementById('frmFuncoes:ieCodSistemaPaiFuncao').value=arguments[1];					
+								document.getElementById('ieCodSistemaPaiFuncaoTMP').value=arguments[1];					
+								document.getElementById('divPainelInclusaoEdicaoFuncoes').style.display = 'block';
+								document.getElementById('divPainelTabelaFuncoes').style.display = 'none';
+								document.getElementById('divPainelBuscaFuncoes').style.display = 'none';
+								document.getElementById('divScrollFuncoes').style.display = 'none';
+								document.getElementById('divPesquisaSistemaFuncao').style.display = 'none';
+							    //alert(metodoAnterior);
+								document.getElementById('frmFuncoes:METODO').value = metodoAnterior;
+								metodoAnterior = '';
+								callBackFuncaoSelecionada = function(){};
+							};
+						}else
+						{
+								document.getElementById('frmFuncoes:ieFuncaoPaiCodFuncao').value='';					
+								document.getElementById('ieFuncaoPaiCodFuncaoTMP').value='';					
+								document.getElementById('frmFuncoes:ieFuncaoPaiCodSistema').value='';					
+						}
+					}
+					
+				// -->
+			</script>
+
+<div id='divControlesCadastroFuncoes' style="display:block">
+			
+			   <a4j:form ajaxSubmit="true" id="frmFuncoes">
+			
+				<a4j:region>
+			
+			   <table border="0">
+						<tr>
+							<td>
+								<div id="divPainelBuscaFuncoes">
+									<h:panelGrid id="painelFuncao" columns="2">
+										<h:panelGroup>
+											Código: <h:inputText value="#{FuncaoBean.funcaoSearchVo.funcao.compId.codFuncaoFunc}" id="Codigo" styleClass="texto" maxlength="8" style="width:50px;"/>
+											Nome:	<h:inputText value="#{FuncaoBean.funcaoSearchVo.funcao.nomeFunc}" id="Descricao" styleClass="texto" style="text-transform: none;"/>
+									 		Sistema selecionado: <span id="divCodSistemaSelecionado"> <h:outputText id="tmpCodSistemaSelecionado" value="#{FuncaoBean.funcaoSearchVo.funcao.sistema.codSistemaSist}"></h:outputText> </span>
+							                      <f:verbatim>
+							                        &#x00A0;
+							                      </f:verbatim>
+									 		
+									 			<input type="button" id="cmdFuncaoPesquisarSistema" onclick="abrirTelaSelecaoSistema();" value="Sistema..." style="background: url(resource/sistema_pequeno.gif) no-repeat;width:80px;"/>
+										</h:panelGroup>						
+										
+										<h:panelGroup>
+											<center>
+							                      <f:verbatim>
+							                        &#x00A0;
+							                      </f:verbatim>
+											</center>
+										</h:panelGroup>						
+				
+										
+										<h:panelGroup>
+											 	<a4j:commandButton value="Pesquisar" action="#{FuncaoBean.listarFuncoes}" reRender="tabelaFuncoes, msgErroFuncoes, scrollFuncao, painelFuncao, divPainelBuscaFuncoes" eventQueue="grupoQueue" id="cmdFuncaoPesquisar" onclick="desabilitarBotoesFuncoes();" oncomplete="atualizarStatusBotoesFuncoes();" style="background: url(resource/pesquisar.gif) no-repeat;width:80px;"/>
+											 	<a4j:commandButton value="Incluir" action="#{FuncaoBean.prepararInclusao}"  reRender="painelFuncao,painelInclusaoEdicaoFuncoes,msgErroFuncoes" eventQueue="grupoQueue" id="cmdFuncaoIncluir" onclick="desabilitarBotoesFuncoes();" oncomplete="callbackInserirFuncoes();" style="background: url(resource/incluir.gif) no-repeat;width:80px;"/>
+											 	<a4j:commandButton value="Excluir" action="#{FuncaoBean.excluir}" reRender="tabelaFuncoes, msgErroFuncoes, scrollFuncao" eventQueue="grupoQueue" id="cmdFuncaoExcluir" onclick="desabilitarBotoesFuncoes();" oncomplete="atualizarStatusBotoesFuncoes();" style="background: url(resource/excluir.gif) no-repeat;width:80px;"/>
+											 	<a4j:commandButton value="Alterar" action="#{FuncaoBean.prepararEdicao}"  reRender="painelInclusaoEdicaoFuncoes, painelFuncao, msgErroFuncoes" eventQueue="grupoQueue" id="cmdFuncaoAlterar" oncomplete="callbackInserirFuncoes();" onclick="desabilitarBotoesFuncoes();" style="background: url(resource/incluir.gif) no-repeat;width:80px;"/>
+									    		 <h:inputHidden id="codFuncaoFuncSelecionada"/>					 
+									    		 <h:inputHidden id="codSistemaFuncaoFuncSelecionada"/>					 
+									    		 <h:inputHidden value="#{FuncaoBean.METODO}" id="METODO"/>					 
+									    		 <h:inputHidden value="#{FuncaoBean.funcaoSearchVo.funcao.sistema.codSistemaSist}" id="codSistemaSelecionadoFuncaoPesquisa"/>					 
+										</h:panelGroup>
+									</h:panelGrid>	
+								</div>
+								 
+							</td>
+						</tr>
+						
+						<tr>
+								<td> 
+									<div style="height:300px;" id="divPainelTabelaFuncoes">
+									<!--
+							            <rich:scrollableDataTable rowKeyVar="rkv"  height="400px" 
+							                width="700px" id="tabelaFuncoes" rows="20" 
+							                value="#{FuncaoBean.listaFuncoes}" var="grupo" sortMode="single">
+									-->
+								            <rich:dataTable 
+								                width="750px"   
+												id="tabelaFuncoes" 
+								                value="#{FuncaoBean.listaFuncoes}" var="funcao" rows="8"
+							    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+							                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							                    binding="#{FuncaoBean.modelo}"			                
+								                >
+			
+								                <rich:column style="width:5px;">
+								                    <f:facet name="header">
+								                      <f:verbatim>
+								                        &#x00A0;
+								                      </f:verbatim>
+								                    </f:facet>
+								                    <input type="radio" name="cod" onclick="setarFuncaoSelecionada('${funcao.compId.codFuncaoFunc}','${funcao.compId.codSistemaSist}','${funcao.codSistemaPaiFunc}');"/>
+								                </rich:column>
+			
+								                <rich:column style="width:50px;">
+								                    <f:facet name="header">
+								                    	<h:outputText styleClass="headerText" value="Código" />
+								                    </f:facet>
+							                    	<h:outputText value="#{funcao.compId.codFuncaoFunc}"/>
+								                      <f:verbatim>
+								                        &#x00A0;
+								                      </f:verbatim>
+								                </rich:column>
+									
+			
+								                <rich:column >
+								                    <f:facet name="header">
+								                    	<h:outputText styleClass="headerText" value="Nome"/>
+								                    </f:facet>
+							                    	<h:outputText value="#{funcao.nomeFunc}"/>
+							                      <f:verbatim>
+							                        &#x00A0;
+							                      </f:verbatim>
+								                </rich:column>
+			
+								                <rich:column >
+								                    <f:facet name="header">
+								                    	<h:outputText styleClass="headerText" value="Descrição"/>
+								                    </f:facet>
+							                    	<h:outputText value="#{funcao.descrFuncaoFunc}"/>
+								                      <f:verbatim>
+									                        &#x00A0;	
+						                      </f:verbatim>
+								                </rich:column>
+			
+								                <rich:column >
+								                    <f:facet name="header">
+								                    	<h:outputText styleClass="headerText" value="Sistema"/>
+								                    </f:facet>
+							                    	<h:outputText value="#{funcao.sistema.codSistemaSist}"/>
+							                      <f:verbatim>
+							                        &#x00A0;
+							                      </f:verbatim>
+								                </rich:column>
+			
+			
+								                <rich:column >
+								                    <f:facet name="header">
+								                    	<h:outputText styleClass="headerText" value="Sistema Pai"/>
+								                    </f:facet>
+							                    	<h:outputText value="#{funcao.codSistemaPaiFunc}"/>
+							                      <f:verbatim>
+							                        &#x00A0;
+							                      </f:verbatim>
+								                </rich:column>
+			
+								            </rich:dataTable>
+								       </div>
+						            
+								</td>
+							</tr>
+					</table>
+					
+					<p/>
+						 <div id="divScrollFuncoes">
+						 	<rich:datascroller align="center"  for="tabelaFuncoes" maxPages="20" id="scrollFuncao" />
+						 </div>
+					
+				</a4j:region>
+				
+				<center>
+				   <h:panelGrid>	
+							<h:panelGroup>
+								<center>
+									<h:panelGrid id="msgErroFuncoes" >
+										<h:messages layout="table" errorClass="msgerro"/>					 
+									</h:panelGrid>
+								</center>
+							</h:panelGroup>						
+					</h:panelGrid>
+				</center>	
+				
+				
+				<center>
+			        <div id="divPainelInclusaoEdicaoFuncoes" style=" display:none;border:1px solid #000000; width: 260px;background-color: #FFFFFF; ">    
+
+						<h:panelGrid id="painelInclusaoEdicaoFuncoes">
+					        <div style=" border:1px solid #000000; background-color: #DDECFF; width: 250px;" id="divTituloFuncao">    
+				                Funções
+				            </div>
+							<h:panelGrid columns="2">
+											<f:verbatim>
+												Sistema:
+											</f:verbatim>
+											<h:panelGroup>
+												<input type="text" value="#{FuncaoBean.funcaoVo.sistema.codSistemaSist}" id="ieCodSistemaFuncaoTMP" class="texto" style="width: 70px;" maxlength="3" disabled="true">
+												</input>
+												<h:inputHidden value="#{FuncaoBean.funcaoVo.sistema.codSistemaSist}" id="ieCodSistemaFuncao" onchange="alert(this.value)">
+												</h:inputHidden>								
+									    		 <h:inputHidden value="#{FuncaoBean.funcaoVo.compId.codSistemaSist}" id="pkcodSistemaSelecionadoFuncaoPesquisa" />					 
+									 			<input type="button" id="cmdIEFuncaoPesquisarSistema" onclick="abrirTelaSelecaoSistema(0);" value="Sistema..." style="background: url(resource/sistema_pequeno.gif) no-repeat;width:90px;"/>
+											</h:panelGroup>
+											
+											<f:verbatim>
+												Sistema Pai:
+											</f:verbatim>
+											<h:panelGroup>
+												<input type="text" value="#{FuncaoBean.funcaoVo.codSistemaPaiFunc}" id="ieCodSistemaPaiFuncaoTMP" class="texto" style="width: 70px;" disabled="true">
+												</input>								
+												<h:inputHidden value="#{FuncaoBean.funcaoVo.codSistemaPaiFunc}" id="ieCodSistemaPaiFuncao" >
+												</h:inputHidden>								
+									 			<input type="button" id="cmdIEFuncaoPesquisarSistemaPai" onclick="abrirTelaSelecaoSistema(1);" value="Sistema..." style="background: url(resource/sistema_pequeno.gif) no-repeat;width:90px;"/>
+											</h:panelGroup>
+											
+											<f:verbatim>
+												Função Pai
+											</f:verbatim>
+											<h:panelGroup>
+												<input type="text" value="#{FuncaoBean.funcaoVo.codFuncaoPaiFunc}" id="ieFuncaoPaiCodFuncaoTMP" class="texto" style="width: 70px;" maxlength="8" disabled="true">
+												</input>
+												<h:inputHidden value="#{FuncaoBean.funcaoVo.codFuncaoPaiFunc}" id="ieFuncaoPaiCodFuncao">
+												</h:inputHidden>
+												<h:inputHidden value="#{FuncaoBean.funcaoVo.codSistemaPaiFunc}" id="ieFuncaoPaiCodSistema"/>
+												
+									 			<input type="button" id="cmdIEFuncaoPesquisarFuncaoPai" onclick="abrirTelaPesquisaFuncaoPai();" value="Função Pai..." style="background: url(resource/funcao_pequeno.gif) no-repeat;width:90px;"/>
+											</h:panelGroup>
+												
+											<f:verbatim>
+												Código:
+											</f:verbatim>
+											<h:inputText value="#{FuncaoBean.funcaoVo.compId.codFuncaoFunc}" id="ieCodigoFuncao" styleClass="texto" style="width: 170px;"  >
+											</h:inputText>								
+
+
+											<f:verbatim>
+												Nome:
+											</f:verbatim>
+											<h:inputText value="#{FuncaoBean.funcaoVo.nomeFunc}" id="ieNomeFuncao" styleClass="texto" style="width: 170px;text-transform:none;"  >
+											</h:inputText>								
+
+
+											<f:verbatim>
+												Descrição:
+											</f:verbatim>
+											<h:inputTextarea value="#{FuncaoBean.funcaoVo.descrFuncaoFunc}" id="ieDescricaoFuncao" styleClass="texto" style="width: 170px;text-transform:none;"  >
+											</h:inputTextarea >								
+											
+				              </h:panelGrid>
+							<center>
+								<h:panelGrid id="msgErroPopUpFuncao" >
+									<h:messages layout="table" errorClass="msgerro"/>					 
+								</h:panelGrid>
+							</center>
+								<h:panelGrid columns="2">
+								 	<a4j:commandButton value="Confirmar" action="#{FuncaoBean.confirmarEdicao}" reRender="msgErroPopUpFuncao, painelFuncao, tabelaFuncoes, scrollFuncao" eventQueue="grupoQueue" id="ieCmdConfirmar" onclick="desabilitarBotoesInclusaoExclusao();" oncomplete="callcackConfirmarInclusaoEdicaoFuncoes();" style="background: url(resource/confirmar.gif) no-repeat;width:80px;"/>
+								 	<input type="button" value="Cancelar" onclick="fecharTelaInclusaoEdicaoFuncoes();" style="background: url(resource/cancelar.gif) no-repeat;width:80px;"/>
+								</h:panelGrid>
+						</h:panelGrid>
+
+					</div>
+				</center>
+			</a4j:form>
+</div>
+
+				<div id='divPesquisaSistemaFuncao' style='display:none;'>
+					<ui:include src="sistemasPesquisa.xhtml"/>
+				</div>
+									
+					<script>
+						<!--
+							atualizarStatusBotoesFuncoes();
+						//-->
+					</script>
+					
+			</ui:define>	
+			
+			
+			
+			</ui:composition>
+
+</jsp:root>

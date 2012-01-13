@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<ui:composition template="layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:jsp="http://java.sun.com/JSP/Page" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"  
+    xmlns:h="http://java.sun.com/jsf/html" 
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:t="http://myfaces.apache.org/tomahawk"
+    xmlns:bp="http://java.sun.com/blueprints/ui/14"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<ui:define name="title">DNSEC 0.2 - Usuários</ui:define>
+
+<ui:define name="content">
+
+<script>
+	<!--
+		function desabilitarBotoes()
+		{
+			var cmdPesquisar = document.getElementById('frmUsuarios:cmdPesquisar');
+			var cmdIncluir = document.getElementById('frmUsuarios:cmdIncluir');
+			var cmdExcluir = document.getElementById('frmUsuarios:cmdExcluir');
+			var cmdAlterar = document.getElementById('frmUsuarios:cmdAlterar');
+			var cmdGravar = document.getElementById('frmUsuarios:cmdGravar');
+			cmdPesquisar.disabled = true;
+			cmdIncluir.disabled = true;
+			cmdExcluir.disabled = true;
+			cmdAlterar.disabled = true;
+			cmdGravar.disabled = true;
+		}
+
+		function atualizarStatusBotoes()
+		{
+			var cmdPesquisar = document.getElementById('frmUsuarios:cmdPesquisar');
+			var cmdIncluir = document.getElementById('frmUsuarios:cmdIncluir');
+			var cmdExcluir = document.getElementById('frmUsuarios:cmdExcluir');
+			var cmdAlterar = document.getElementById('frmUsuarios:cmdAlterar');
+			var cmdGravar = document.getElementById('frmUsuarios:cmdGravar');
+			var metodo = document.getElementById('frmUsuarios:METODO').value;
+
+			desabilitarBotoes();
+			//alert(metodo);
+			
+			if('listar' == metodo)
+			{
+				cmdPesquisar.disabled = false;
+				cmdIncluir.disabled = false;
+				cmdExcluir.disabled = false;
+				cmdAlterar.disabled = false;
+				cmdGravar.disabled = true;
+			}else if('prepararInclusao' == metodo)
+			{
+				cmdPesquisar.disabled = true;
+				cmdIncluir.disabled = false;
+				cmdExcluir.disabled = true;
+				cmdAlterar.disabled = true;
+				cmdGravar.disabled = false;
+								
+			}else if('prepararEdicao' == metodo)
+			{
+				cmdPesquisar.disabled = true;
+				cmdIncluir.disabled = true;
+				cmdExcluir.disabled = true;
+				cmdAlterar.disabled = false;
+				cmdGravar.disabled = false;
+			}else if('ERRO_NAO_ESPERADO' == metodo)
+			{
+				desabilitarBotoes();
+			}			
+		}
+		
+		
+		function callbackInserir()
+		{
+			var metodo = document.getElementById('frmUsuarios:METODO').value;
+			if('prepararInclusao' == metodo || 'prepararEdicao' == metodo){
+				if('prepararInclusao' == metodo)
+				{
+					titulo = 'Usuários - Inclusão';
+					document.getElementById('frmUsuarios:ieUsuarioBloqueadoHidden').value='N';
+					document.getElementById('ieUsuarioBloqueadoCheck').checked=false;					
+					document.getElementById('frmUsuarios:iePodeAlterarSenhaHidden').value='N';
+					document.getElementById('iePodeAlterarSenhaCheck').checked=false;					
+					document.getElementById('frmUsuarios:ieCodigo').readOnly = false;
+					document.getElementById('frmUsuarios:ieCmdConfirmar').disabled = false;
+				}else{
+					titulo = 'Sistemas - Edição';
+					document.getElementById('frmUsuarios:ieCodigo').readOnly = true;
+					document.getElementById('frmUsuarios:ieCmdConfirmar').disabled = false;
+
+					if(document.getElementById('frmUsuarios:ieUsuarioBloqueadoHidden').value=='S')
+					{
+						document.getElementById('ieUsuarioBloqueadoCheck').checked=true;					
+					}else
+					{
+					document.getElementById('ieUsuarioBloqueadoCheck').checked=false;					
+					}
+
+					if(document.getElementById('frmUsuarios:iePodeAlterarSenhaHidden').value=='S')
+					{
+						document.getElementById('iePodeAlterarSenhaCheck').checked=true;					
+					}else
+					{
+						document.getElementById('iePodeAlterarSenhaCheck').checked=false;					
+					}
+					
+					
+				}
+				document.getElementById('divTitulo').innerHTML = titulo;
+				document.getElementById('divPainelInclusaoEdicao').style.display = 'block';
+				document.getElementById('divPainelTabela').style.display = 'none';
+				atualizarStatusBotoes();
+			}else{
+				fecharTelaInclusaoEdicao();
+			}
+		}
+		
+
+		function fecharTelaInclusaoEdicao()
+		{
+			document.getElementById('divPainelInclusaoEdicao').style.display = 'none';
+			document.getElementById('divPainelTabela').style.display = 'block';
+			/*document.getElementById('divPainelBusca').style.display = 'block';
+			document.getElementById('divScroll').style.display = 'block';*/
+			document.getElementById('frmUsuarios:METODO').value = 'listar';
+			atualizarStatusBotoes();
+		}
+
+
+		function callcackConfirmarInclusaoEdicao()
+		{
+			var metodo = document.getElementById('frmUsuarios:METODO').value;
+			if('listar' == metodo)
+			{
+				fecharTelaInclusaoEdicao();
+			}
+			document.getElementById('frmUsuarios:ieCmdConfirmar').disabled = false;
+			atualizarStatusBotoes();			
+		}
+		
+		
+		function desabilitarBotoesInclusaoExclusao()
+		{
+			document.getElementById('frmUsuarios:ieCmdConfirmar').disabled = true;
+		}
+
+		
+	// -->
+</script>
+
+<a4j:form ajaxSubmit="true" id="frmUsuarios">
+  
+<div id="divPainelTabela">
+   <table border="0">
+			<tr>
+				<td>
+					<h:panelGrid id="painelUsuario" columns="2">
+						<h:panelGroup>
+							Código: <h:inputText value="#{UsuarioBean.usuarioSearchVo.usuario.codUsuarioUsua}" id="Código" styleClass="texto" style="width:250px;"/>
+							Nome:	<h:inputText value="#{UsuarioBean.usuarioSearchVo.usuario.nomeUsuarioUsua}" id="Descrição" styleClass="texto" style="width:250px;"/>
+						</h:panelGroup>						
+						
+						<h:panelGroup>
+							<center>
+								<h:panelGrid>
+			                        &#x00A0;
+								</h:panelGrid>
+							</center>
+						</h:panelGroup>						
+						
+						
+						<h:panelGroup>
+							 	<a4j:commandButton value="Pesquisar" action="#{UsuarioBean.listarUsuarios}" reRender="tabelaUsuarios, msgErro, scroll" eventQueue="usuarioQueue" id="cmdPesquisar" onclick="desabilitarBotoes();" oncomplete="atualizarStatusBotoes();" style="background: url(resource/pesquisar.gif) no-repeat;width:80px;"/>
+							 	<a4j:commandButton value="Incluir" action="#{UsuarioBean.prepararInclusao}" reRender="msgErro, painelUsuario, painelInclusaoEdicao" eventQueue="usuarioQueue" id="cmdIncluir" onclick="desabilitarBotoes();" oncomplete="callbackInserir();" style="background: url(resource/incluir.gif) no-repeat;width:80px;"/>
+							 	<a4j:commandButton value="Excluir" action="#{UsuarioBean.excluir}" reRender="tabelaUsuarios, msgErro, scroll" eventQueue="usuarioQueue" id="cmdExcluir" onclick="desabilitarBotoes();" oncomplete="atualizarStatusBotoes();" style="background: url(resource/excluir.gif) no-repeat;width:80px;"/>
+							 	<a4j:commandButton value="Alterar" action="#{UsuarioBean.prepararEdicao}" reRender="msgErro, painelUsuario, painelInclusaoEdicao" eventQueue="usuarioQueue" id="cmdAlterar" onclick="desabilitarBotoes();" oncomplete="callbackInserir();" style="background: url(resource/alterar.gif) no-repeat;width:80px;" />
+							 	<div style="display:none;">
+							 		<a4j:commandButton value="Gravar" action="#{UsuarioBean.confirmarEdicao}" reRender="msgErro, painelUsuario, tabelaUsuarios, scroll" eventQueue="usuarioQueue" id="cmdGravar" onclick="desabilitarBotoes();" oncomplete="atualizarStatusBotoes();" style="background: url(resource/confirmar.gif) no-repeat;width:80px;"/>
+							 	</div>
+					    		 <h:inputHidden value="#{UsuarioBean.usuarioVo.codUsuarioUsua}" id="usuariocodUsuarioUsua" />					 
+					    		 <h:inputHidden value="#{UsuarioBean.METODO}" id="METODO" />					 
+						</h:panelGroup>
+					</h:panelGrid>	
+					 
+				</td>
+			</tr>
+			
+			<tr>
+					<td> 
+						<div style="height:300px;">
+						<!--
+				            <rich:scrollableDataTable rowKeyVar="rkv"  height="400px" 
+				                width="700px" id="tabelaUsuarios" rows="20" 
+				                value="#{UsuarioBean.listaUsuarios}" var="usuario" sortMode="single">
+						-->
+					            <rich:dataTable 
+					                width="750px"   
+									id="tabelaUsuarios" 
+					                value="#{UsuarioBean.listaUsuarios}" var="usuario" rows="10"
+				    				onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+				                    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+				                    binding="#{UsuarioBean.modelo}"			                
+					                >
+
+					                <rich:column style="width:5px;">
+					                    <f:facet name="header">
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                    </f:facet>
+					                    <input type="radio" name="cod" onclick="document.getElementById('frmUsuarios:usuariocodUsuarioUsua').value='${usuario.codUsuarioUsua}';"/>
+					                </rich:column>
+
+					                
+					                <rich:column style="width:100px;">
+					                    <f:facet name="header">
+					                    	<h:outputText styleClass="headerText" value="Código" />
+					                    </f:facet>
+				                    	<h:outputText value="#{usuario.codUsuarioUsua}"/>
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                </rich:column>
+					
+					                <rich:column style="width:300px;">
+					                    <f:facet name="header">
+					                    	<h:outputText styleClass="headerText" value="Nome"/>
+					                    </f:facet>
+				                    	<h:outputText value="#{usuario.nomeUsuarioUsua}"/>
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                </rich:column>
+
+					                <rich:column >
+					                    <f:facet name="header">
+					                    	<h:outputText styleClass="headerText" value="Telefone"/>
+					                    </f:facet>
+				                    	<h:outputText value="#{usuario.numTelefoneUsua}"/>
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                </rich:column>
+
+					                <rich:column >
+					                    <f:facet name="header">
+					                    	<h:outputText styleClass="headerText" value="e-mail"/>
+					                    </f:facet>
+				                    	<h:outputText value="#{usuario.codEmailUsua}"/>
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                </rich:column>
+
+					                <rich:column style="width:15px;">
+					                    <f:facet name="header">
+					                    	<h:outputText styleClass="headerText" value="Bloqueado"/>
+					                    </f:facet>
+				                    	<h:outputText value="#{usuario.condBloqueadoUsua}"/>
+					                      <f:verbatim>
+					                        &#x00A0;
+					                      </f:verbatim>
+					                </rich:column>
+
+					            </rich:dataTable>
+					       </div>
+			            
+					</td>
+				</tr>
+				<tr>
+				<td align="center">
+						 <rich:datascroller align="center"  for="tabelaUsuarios" maxPages="20" id="scroll" />
+				</td>
+				</tr>
+		</table>
+
+</div>
+
+	<center>
+        <div id="divPainelInclusaoEdicao" style="display:none; border:1px solid #000000; width: 450px;background-color: #FFFFFF; ">    
+			<h:panelGrid id="painelInclusaoEdicao">
+		        <div style="width:440px; border:1px solid #000000; background-color: #DDECFF;" id="divTitulo">    
+	                Usuários
+	            </div>
+	            <h:panelGroup>
+						<table border="0" width="100%" cellpadding="1" cellspacing="1">
+							<tr>
+								<td>
+									Código: 
+								</td>
+								<td colspan="3" align="left">	
+									<h:inputText value="#{UsuarioBean.usuarioVo.codUsuarioUsua}" id="ieCodigo" styleClass="texto" maxlength="30" >
+									</h:inputText>								
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Nome: 
+								</td>
+								<td colspan="3">
+									<h:inputText value="#{UsuarioBean.usuarioVo.nomeUsuarioUsua}" id="ieNome" styleClass="texto" style="width: 100%;;" ></h:inputText>
+								</td>
+							</tr>
+
+							<tr>
+								<td>
+									Senha: 
+								</td>
+								<td>
+									<h:inputSecret value="#{UsuarioBean.usuarioVo.codSenhaUsua}" id="ieSenha" styleClass="texto" style="width: 100px;" />							
+								</td>
+								<td>	
+									Confirmação de Senha: 
+								</td>
+								<td>
+									<h:inputSecret value="#{UsuarioBean.confirmacaoSenha}" id="ieConfirmacaoSenha" styleClass="texto" style="width: 100px;" />
+								</td>
+							</tr>
+
+							<tr>
+								<td>
+									e-mail: 
+								</td>
+								<td>
+									<h:inputText value="#{UsuarioBean.usuarioVo.codEmailUsua}" id="ieEmail" styleClass="texto" style="width: 100px;" ></h:inputText>							
+								</td>
+								<td>	
+									Telefone: 
+								</td>
+								<td>
+									<h:inputText value="#{UsuarioBean.usuarioVo.numTelefoneUsua}" id="ieTelefone" styleClass="texto" style="width: 100px;" ></h:inputText>
+								</td>
+							</tr>
+
+							<tr>
+								<td>
+									Validade Senha:
+								</td>
+								<td>
+								 	<rich:inputNumberSpinner minValue="0" maxValue="999" value="#{UsuarioBean.usuarioVo.numDiasValidadesenhaUsua}" />
+								</td>
+								<td>	
+									Qtde Erros Login:								
+								</td>
+								<td>
+								 	<rich:inputNumberSpinner minValue="0" maxValue="9" value="#{UsuarioBean.usuarioVo.qtdeErrosLoginUsua}"/>
+								</td>
+							</tr>
+
+							<tr>
+								<td>
+									Data inclusão:
+								</td>
+								<td>
+									<h:inputText value="#{UsuarioBean.usuarioVo.dataInclusaoUsua}" styleClass="texto" style="width: 100px;" disabled="true">
+										<f:convertDateTime pattern="dd/MM/yyyy"/>
+									</h:inputText>
+								</td>
+								<td>	
+								   Último Acesso:
+								</td>
+								<td>
+									<h:inputText value="#{UsuarioBean.usuarioVo.dataUltAcessoUsua}" styleClass="texto" style="width: 100px;" disabled="true">
+										<f:convertDateTime pattern="dd/MM/yyyy"/>
+									</h:inputText>
+								</td>
+							</tr>
+							
+							<tr>
+								<td>
+									Ultima alteração senha:
+								</td>
+								<td>
+									<h:inputText value="#{UsuarioBean.usuarioVo.dataUltAltSenhaUsua}" styleClass="texto" style="width: 100px;" disabled="true">
+										<f:convertDateTime pattern="dd/MM/yyyy"/>
+									</h:inputText>
+								</td>
+								<td>	
+								   Solicitação da senha:
+								</td>
+								<td>
+									<h:inputText value="#{UsuarioBean.usuarioVo.dataSolicNovaSenha}" styleClass="texto" style="width: 100px;" disabled="true">
+										<f:convertDateTime pattern="dd/MM/yyyy"/>
+									</h:inputText>
+								</td>
+							</tr>
+
+
+							<tr>
+								<td colspan="4">
+									<input type="checkbox" id="iePodeAlterarSenhaCheck" onchange="document.getElementById('frmUsuarios:iePodeAlterarSenhaHidden').value=(this.checked ? 'S':'N');"/>Pode alterar senha
+									<input type="checkbox" id="ieUsuarioBloqueadoCheck" onchange="document.getElementById('frmUsuarios:ieUsuarioBloqueadoHidden').value=(this.checked ? 'S':'N');"/>Usuário Bloqueado
+									<h:inputHidden value="#{UsuarioBean.usuarioVo.condAltSenhaUsua}" id="iePodeAlterarSenhaHidden"/>
+									<h:inputHidden value="#{UsuarioBean.usuarioVo.condBloqueadoUsua}" id="ieUsuarioBloqueadoHidden"/>
+								</td>
+							</tr>
+
+
+							<tr>
+								<td colspan="4">
+									<center>
+										<h:panelGrid id="msgErroPopUp" >
+											<h:messages layout="table" errorClass="msgerro"/>					 
+										</h:panelGrid>
+									</center>
+								</td>
+							</tr>
+
+							<tr>
+								<td colspan="4">
+									<center>
+											 	<a4j:commandButton value="Confirmar" action="#{UsuarioBean.confirmarEdicao}" reRender="msgErroPopUp, tabelaUsuarios, scroll, painelUsuario" eventQueue="usuarioQueue" id="ieCmdConfirmar" onclick="desabilitarBotoesInclusaoExclusao();" oncomplete="callcackConfirmarInclusaoEdicao();" style="background: url(resource/confirmar.gif) no-repeat;width:80px;"/>
+											 	<input type="button" value="Cancelar" onclick="fecharTelaInclusaoEdicao();" style="background: url(resource/cancelar.gif) no-repeat;width:80px;"/>
+									</center>
+								</td>
+							</tr>
+
+
+							
+						</table>	
+				</h:panelGroup>
+			</h:panelGrid>
+		</div>
+	</center>
+
+		</a4j:form>
+
+
+		<center>
+			<h:panelGrid id="msgErro" >
+				<h:messages layout="table" errorClass="msgerro"/>					 
+			</h:panelGrid>
+		</center>
+
+
+		
+		<script>
+			<!--
+				atualizarStatusBotoes();
+			//-->
+		</script>
+		
+</ui:define>	
+</ui:composition>
+

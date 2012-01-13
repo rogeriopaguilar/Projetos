@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="dnsec.shared.database.hibernate.Grupo" table="GRUPO">
+
+		<id name="codGrupoGrup" unsaved-value="null">
+			<column name="COD_GRUPO_GRUP" not-null="true" />
+			<generator class="assigned" />
+		</id>
+
+		<property name="descrGrupoGrup">
+			<column name="DESCR_GRUPO_GRUP" length="255" not-null="true" />
+		</property>
+
+		<!-- set name="usuarios" table="GRUPO_USUARIO" lazy="true" inverse="true" -->
+
+		<set name="usuarios" table="GRUPO_USUARIO" lazy="true">
+			<key column="COD_GRUPO_GRUP"/>
+			<many-to-many column="COD_USUARIO_USUA"  class="dnsec.shared.database.hibernate.Usuario" />
+		</set>
+
+		<set name="sistemas" table="GRUPO_SISTEMA" lazy="true">
+			<key column="COD_GRUPO_GRUP"/>
+			<many-to-many column="COD_SISTEMA_SIST"  class="dnsec.shared.database.hibernate.Sistema" />
+		</set>
+
+		<set name="funcoes" table="GRUPO_FUNCAO" lazy="true" >
+			<key column="COD_GRUPO_GRUP"/>
+			<many-to-many class="dnsec.shared.database.hibernate.Funcao" >
+				<column name="COD_FUNCAO_FUNC"></column>
+				<column name="COD_SISTEMA_SIST"></column>
+			</many-to-many>
+		</set>
+
+
+	</class>
+</hibernate-mapping>

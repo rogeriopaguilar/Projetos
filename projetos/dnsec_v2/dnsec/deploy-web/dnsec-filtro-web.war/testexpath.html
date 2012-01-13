@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script>
+
+   // ![CDATA[  
+       function testXpath() {  
+         // create a DOM document  
+         var xmlStr = "?xml version='1.0' encoding='UTF-8'?"+  
+         "xsl:stylesheet version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'"+  
+         "xsl:output method='xml' version='1.0' encoding='UTF-8' indent='yes'/"+  
+         "xsl:template match='*'/xsl:templatexsl:template match='@*'"+  
+         "/xsl:template/xsl:stylesheet";  
+         var xmlDoc = (new DomParser()).parseFromString(xmlStr, "text/xml");  
+           
+         // the following two lines are needed for IE  
+         xmlDoc.setProperty("SelectionNamespaces", "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'");  
+         xmlDoc.setProperty("SelectionLanguage", "XPath");  
+           
+         // test XPath expressions on the document  
+         testSelectNodesOn(xmlDoc, "//xsl:template");  
+         testSelectNodesOn(xmlDoc.documentElement, "//xsl:template");  
+         testSelectNodesOn((xmlDoc.documentElement.getElementsByTagName("*"))[0], "//xsl:template");  
+       }  
+       function testSelectNodesOn(domNode, sXpath) {  
+         alert("testing selectNodes("+sXpath+") on a "+domNode);  
+         var objNodeList = domNode.selectNodes(sXpath);  
+         for(i=0;iobjNodeList.length;i++){  
+             alert(new XMLSerializer().serializeToString(objNodeList[  i]));  
+         };  
+         alert("testing selectSingleNode("+sXpath+") on a "+domNode);  
+         var oElem = domNode.selectSingleNode(sXpath);  
+         alert(oElem+"\n"+new XMLSerializer().serializeToString(oElem));  
+       };  
+     // ]] 
+
+<title>Insert title here</title>
+</head>
+<body>
+
+</body>
+</html>
