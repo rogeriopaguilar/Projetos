@@ -12,8 +12,18 @@ excel em java
 --projeto
 
 -dnsec_v2: sistema para controle de segurança que desenvolvi para aprender as
-tecnologias java swing e hibernate.
+tecnologias java swing, hibernate e jsf com richfaces.
 --/dnsec_v2/dnsec/doc --> contém o manual de instalação do sistema
 --/dnsec_v2/dnsec/build.xml --> build do ant utilizado para compilar e empacotar o projeto
 (é necessário alterar o caminho da entrada /opt/java/SDK/lib no arquivo para o diretório
 onde o jar javaee.jar está na máquina de desenvolvimento).
+--/dnsec_v2/dnsec/deploy-web --> mesma aplicação só que utilizando jsf com richfaces, ou seja, o mesmo controle,
+mas na web;
+--/dnsec_v2/dnsec/dnsec-aberto.war --> aplicação (utilizando swing) para deploy com o java web start;
+--dnsec_v2/dnsec/dnsec-filtro-web.war --> filtro para utilização em aplicações que tenhas os dados de segurança cadastrados
+na base de dados de segurança (este filtro não está finalizado)
+ 
+--estudos/ --> pasta contendo material desenvolvido durante estudos pessoais
+--estudos/python --> pasta contendo códigos desenvolvidos para estudo da
+--linguagem python
+
