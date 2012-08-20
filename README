@@ -27,3 +27,5 @@ na base de dados de segurança (este filtro não está finalizado)
 --estudos/python --> pasta contendo códigos desenvolvidos para estudo da
 --linguagem python
 
+--projetos/cadastroveiculos --> pequeno projeto para estudo das tecnologias jquery, vraptor 3.4, jpa e sitemesh.
+(projeto ainda não concluído e não adaptado para o maven. Eu criei ele no eclipse indigo)
