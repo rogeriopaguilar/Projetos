@@ -1,0 +1,27 @@
+	.grid_16 select, .grid_16 input, .grid_16 textarea {
+	    width: 300px;
+	}
+
+	.ui-autocomplete, .ui-menu, .ui-menu-item {  z-index: 1500; }
+	
+	a:link {border-bottom: none;}
+	a:visited {}
+	a:hover {
+		text-decoration: underline;
+	}
+	a:active {}
+	
+	#linkPrimeiro, #linkAnterior, #linkProximo, #linkUltimo{
+		border: 1px solid #666;
+		padding: 5px;
+		display: block;
+		float: left;
+		width: 25px;
+		text-align: center;
+		margin: 2px;
+	}
+	
+	
+	#dialog_link{
+		float: right;
+	}

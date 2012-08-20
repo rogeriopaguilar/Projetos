@@ -1,0 +1,7 @@
+<sitemesh>
+  <mapping path="/*" decorator="/decorator.jsp"/>
+ <!-- Exclude path from decoration. -->
+  <mapping path="/veiculos/listarJson*" exclude="true"/>
+  <mapping path="/js/*" exclude="true"/>
+ 
+  </sitemesh>

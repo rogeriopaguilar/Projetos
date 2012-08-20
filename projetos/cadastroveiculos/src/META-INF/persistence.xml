@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+                                 http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <class>model.Categoria</class>
+        <class>model.Marca</class>
+        <class>model.Modelo</class>
+        <class>model.Pessoa</class>
+        <class>model.Veiculo</class>
+        <class>model.HistoricoResponsabilidade</class>
+        
+        <exclude-unlisted-classes/>
+        
+        <properties>
+			 <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+	         <property name="javax.persistence.jdbc.user" value="root"/>
+	         <property name="javax.persistence.jdbc.password" value="root"/>
+	         <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/cadastroveiculos?autoReconnect=true"/>
+        
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+            <property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true"></property>
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider" />
+            <!-- property name="hibernate.hbm2ddl.auto" value="create-drop"/ -->
+            
+        </properties>
+    </persistence-unit>
+
+	<!--  Utilizada para criar as tabelas -->
+    <persistence-unit name="default-criacao" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <class>model.Categoria</class>
+        <class>model.Marca</class>
+        <class>model.Modelo</class>
+        <class>model.Pessoa</class>
+        <class>model.Veiculo</class>
+        <class>model.HistoricoResponsabilidade</class>
+        
+        <exclude-unlisted-classes/>
+        
+        <properties>
+			 <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+	         <property name="javax.persistence.jdbc.user" value="root"/>
+	         <property name="javax.persistence.jdbc.password" value="root"/>
+	         <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/cadastroveiculos?autoReconnect=true"/>
+        
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+            <property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true"></property>
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider" />
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            
+        </properties>
+    </persistence-unit>
+
+
+</persistence>
