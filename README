@@ -29,3 +29,13 @@ na base de dados de segurança (este filtro não está finalizado)
 
 --projetos/cadastroveiculos --> pequeno projeto para estudo das tecnologias jquery, vraptor 3.4, jpa e sitemesh.
 (projeto ainda não concluído e não adaptado para o maven. Eu criei ele no eclipse indigo)
+
+--projetos/tccFinal2003 --> Meu trabalho de conclusão de curso. Trata-se da implementação de um jogo on-line
+de cartass conhecido como MauMau.
+--projetos/tccFinal2003/Monografia.pdf --> documento descrevendo o projeto
+--projetos/tccFinal2003/api --> documentação da implementação no formato javadoc
+--projetos/tccFinal2003/MauMau --> binários da aplicação cliente, que devem ser instalados em um aparelho com suporte
+ao j2me
+--projetos/tccFinal2003/ServidorMauMau --> binário do servidor utilizado para o jogo on-line.
+--projetos/tccFinal2003/src --> código fonte para o cliente e o servidor
+
