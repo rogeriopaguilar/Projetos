@@ -1,0 +1,4 @@
+-libraryjars C:\WTK20\lib\mmapi.zip;C:\WTK20\lib\wma.zip;C:\WTK20\lib\midpapi.zip
+-injars C:\WTK20\apps\MauMau\bin\MauMau.jar
+-outjar C:\DOCUME~1\duquepop\CONFIG~1\Temp\MauMau.jar
+-keep public class * extends javax.microedition.midlet.MIDlet 

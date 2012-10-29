@@ -1,0 +1,10 @@
+IP_SERVIDOR: localhost
+MIDlet-1: MauMau, /MauMau.png, jogo.CartasMidlet
+MIDlet-Jar-Size: 102866
+MIDlet-Jar-URL: MauMau.jar
+MIDlet-Name: MauMau
+MIDlet-Vendor: Sun Microsystems
+MIDlet-Version: 1.0
+MicroEdition-Configuration: CLDC-1.0
+MicroEdition-Profile: MIDP-2.0
+PORTA_SERVIDOR: 5656
