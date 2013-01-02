@@ -1,0 +1,47 @@
+Lista de projetos:
+
+-projetos/Retris.zip --> instalação do clone do jogo Retris, que desenvolvi
+-há vários anos...
+
+-projetos/GeradorPalavras --> Classe que gera combinações de palavras em java
+--|ler o javadoc da classe GeradorPalavras para entender como utilizá-la
+
+-projetos/leitorecel0.1RC01desenv --> componente para leitura de planilhas
+excel em java
+--|ler o documento Leiame.txt dentro da pasta do projeto para obter dados do
+--projeto
+
+-dnsec_v2: sistema para controle de segurança que desenvolvi para aprender as
+tecnologias java swing, hibernate e jsf com richfaces.
+--/dnsec_v2/dnsec/doc --> contém o manual de instalação do sistema
+--/dnsec_v2/dnsec/build.xml --> build do ant utilizado para compilar e empacotar o projeto
+(é necessário alterar o caminho da entrada /opt/java/SDK/lib no arquivo para o diretório
+onde o jar javaee.jar está na máquina de desenvolvimento).
+--/dnsec_v2/dnsec/deploy-web --> mesma aplicação só que utilizando jsf com richfaces, ou seja, o mesmo controle,
+mas na web;
+--/dnsec_v2/dnsec/dnsec-aberto.war --> aplicação (utilizando swing) para deploy com o java web start;
+--dnsec_v2/dnsec/dnsec-filtro-web.war --> filtro para utilização em aplicações que tenhas os dados de segurança cadastrados
+na base de dados de segurança (este filtro não está finalizado)
+ 
+--estudos/ --> pasta contendo material desenvolvido durante estudos pessoais
+--estudos/python --> pasta contendo códigos desenvolvidos para estudo da
+--linguagem python
+
+--projetos/cadastroveiculos --> pequeno projeto para estudo das tecnologias jquery, vraptor 3.4, jpa e sitemesh.
+(projeto ainda não concluído e não adaptado para o maven. Eu criei ele no eclipse indigo)
+
+--projetos/tccFinal2003 --> Meu trabalho de conclusão de curso. Trata-se da implementação de um jogo on-line
+de cartass conhecido como MauMau.
+--projetos/tccFinal2003/Monografia.pdf --> documento descrevendo o projeto
+--projetos/tccFinal2003/api --> documentação da implementação no formato javadoc
+--projetos/tccFinal2003/MauMau --> binários da aplicação cliente, que devem ser instalados em um aparelho com suporte
+ao j2me
+--projetos/tccFinal2003/ServidorMauMau --> binário do servidor utilizado para o jogo on-line.
+--projetos/tccFinal2003/src --> código fonte para o cliente e o servidor
+
+--projetos/rtail-0.1 --> Este é um programa que simula o funcionamento do comando "tail -f" do linux 
+--classe principal que deve ser executada: 
+
+
+
+
