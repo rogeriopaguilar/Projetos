@@ -1,0 +1,19 @@
+-Programa que simula o tráfego de veículos por um semáforo entre duas ruas que se cruzam e tem direção única
+-criado em: jan/2013
+-autor: Rogério de Paula Aguilar - rogeriodpaguilarbr@gmail.com
+
+-motivação: Criei este programa após um exercício proposto no guj:
+
+     http://www.guj.com.br/java/291379-criacao-de-um-sistema-de-semafaros-em-java/2#1544630
+
+-classe principal (necessário utilizar o jdk 1.7 ou superior):
+
+     simuladorsemaforos.SimuladorSemaforo
+
+
+-os arquivos fontes estão com a codificação utf-8
+-os fontes deste projeto estão em:
+         https://github.com/rogeriopaguilar/Projetos/simuladorsemaforos
+
+-criei o programa no Netbeans 6.9
+-necessário utilizar o jdk 1.7 ou superior
