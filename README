@@ -42,6 +42,7 @@ ao j2me
 --projetos/rtail-0.1 --> Este é um programa que simula o funcionamento do comando "tail -f" do linux 
 --classe principal que deve ser executada: br.eti.rogerioaguilar.minhasclasses.util.tail.ui.TailJanela
 
-
+--projetos/simuladorsemaforos --> Este programa simula o funcionamento de um semáforo entre duas ruas
+--mais detalhes em: projetos/simuladorsemaforos/src/simuladorsemaforos/leiame.txt
 
 
