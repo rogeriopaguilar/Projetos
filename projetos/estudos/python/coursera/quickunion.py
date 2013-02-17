@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #-*- encoding: utf-8 -*-
 
-class QuickUnion(object):
-    """This class implements the QuickUnion operation as an exercise
+class QuickUnionWF(object):
+    """This class implements the weighted QuickUnion operation as an exercise
     for the course Algorithms 1 from the website www.coursera.org
-    2012 - Rogério de Paula Aguilar
+    2013 - Rogério de Paula Aguilar
     """
     
     def __init__(self, numNodes):
@@ -13,6 +13,13 @@ class QuickUnion(object):
         
         if numNodes < 1: raise ValueError("numNodes must be > 0!")
         self.nodes = range(numNodes)
+        self.sizes = [0 for n in self.nodes]
+
+    def printSizes(self):
+        """prints the self.sizes contents"""
+        
+        print self.sizes;
+
     
     def printNodes(self):
         """prints the self.nodes contents"""
@@ -58,9 +65,12 @@ class QuickUnion(object):
         
         
 if __name__ == "__main__":
-    q = QuickUnion(10)
+    q = QuickUnionWF(10)
     q.printNodes()
+    q.printSizes()
+    """
     q.union(4,3)
+    
     q.printNodes()
     q.union(3,8)
     q.printNodes()
@@ -80,4 +90,5 @@ if __name__ == "__main__":
     q.printNodes()
     q.union(7,3)
     q.printNodes()
+    """
     

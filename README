@@ -43,5 +43,11 @@ ao j2me
 --classe principal que deve ser executada: br.eti.rogerioaguilar.minhasclasses.util.tail.ui.TailJanela
 
 --projetos/simuladorsemaforos --> Este programa simula o funcionamento de um semáforo entre duas ruas
---mais detalhes em: projetos/simuladorsemaforos/src/simuladorsemaforos/leiame.txt
+	OBS: movi o projeto para repositório separado:
+         	https://github.com/rogeriopaguilar/simuladorsemaforos
+
+--mais detalhes em: https://github.com/rogeriopaguilar/simuladorsemaforos/src/simuladorsemaforos/README.txt
+
+
+
 

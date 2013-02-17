@@ -54,16 +54,27 @@ class QuickFind(object):
         return self.nodes[nodeStart] == self.nodes[nodeEnd]
     
 if __name__ == "__main__":
+    #6-3 9-4 3-1 2-3 1-8 0-2     
     q = QuickFind(10)
     q.printNodes()
-    q.union(4,3)
+    q.union(6,3)
+    print "6 - 3 ",
     q.printNodes()
-    q.union(3,8)
+    print "9 - 4 ",
+    q.union(9,4)
     q.printNodes()
-    print q.connected(4,8)
-    print q.connected(6,5)
+    print "3 - 1 ",
+    q.union(3,1)
+    q.printNodes()
+    print "2 - 3 ",
+    q.union(2,3)
+    q.printNodes()
+    print "1 - 8 ",
     q.union(1,8)
-    print q.connected(1,3)
+    q.printNodes()
+    print "0 - 2 ",
+    q.union(0,2)
+    q.printNodes()
     
     
     #9,4
