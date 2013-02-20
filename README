@@ -38,6 +38,10 @@ de cartass conhecido como MauMau.
 ao j2me
 --projetos/tccFinal2003/ServidorMauMau --> binário do servidor utilizado para o jogo on-line.
 --projetos/tccFinal2003/src --> código fonte para o cliente e o servidor
+	OBS: movi o projeto para repositório separado:
+         	https://github.com/rogeriopaguilar/tccfinal2003
+
+
 
 --projetos/rtail-0.1 --> Este é um programa que simula o funcionamento do comando "tail -f" do linux 
 --classe principal que deve ser executada: br.eti.rogerioaguilar.minhasclasses.util.tail.ui.TailJanela
